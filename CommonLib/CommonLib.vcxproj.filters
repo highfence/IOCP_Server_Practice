@@ -21,12 +21,6 @@
     <ClInclude Include="LIB_SERVERSYSTEM.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LIB_SERVICECTRL.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="LIB_SESSIONDATA.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="LIB_SESSIONPOOL.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -45,6 +39,12 @@
     <ClInclude Include="Profile.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ServiceController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SessionData.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Packet.cpp">
@@ -59,13 +59,13 @@
     <ClCompile Include="LIB_SESSIONDATA.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="LIB_SERVICECTRL.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="LogSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Profile.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

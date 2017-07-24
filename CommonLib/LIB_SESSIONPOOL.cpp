@@ -8,7 +8,7 @@ LIB_SESSIONPOOL::LIB_SESSIONPOOL()
 	this->m_Lock.Lock();
 	{
 		for ( WORD iter = 0; iter < SESSION_NUM; iter++ )
-			m_SessionBuffer[iter] = new LIB_SESSIONDATA(iter);
+			m_SessionBuffer[iter] = new SessionData(iter);
 	}
 	this->m_Lock.UnLock();
 }
@@ -25,9 +25,9 @@ LIB_SESSIONPOOL::~LIB_SESSIONPOOL()
 	this->m_Lock.UnLock();
 }
 
-LIB_SESSIONDATA* LIB_SESSIONPOOL::CreateSession()
+SessionData* LIB_SESSIONPOOL::CreateSession()
 {
-	LIB_SESSIONDATA* pPlayer = NULL;
+	SessionData* pPlayer = NULL;
 
 	this->m_Lock.Lock();
 	{
@@ -47,9 +47,9 @@ LIB_SESSIONDATA* LIB_SESSIONPOOL::CreateSession()
 	return pPlayer;
 }
 
-const LIB_SESSIONDATA* LIB_SESSIONPOOL::FindSession(WORD wSession)
+const SessionData* LIB_SESSIONPOOL::FindSession(WORD wSession)
 {
-	LIB_SESSIONDATA* pFindSession = NULL;
+	SessionData* pFindSession = NULL;
 
 	this->m_Lock.Lock();
 	{
@@ -60,9 +60,9 @@ const LIB_SESSIONDATA* LIB_SESSIONPOOL::FindSession(WORD wSession)
 	return pFindSession;
 }
 
-const LIB_SESSIONDATA* LIB_SESSIONPOOL::FindSession(LPCTSTR szName)
+const SessionData* LIB_SESSIONPOOL::FindSession(LPCTSTR szName)
 {
-	LIB_SESSIONDATA* pFindSession = NULL;
+	SessionData* pFindSession = NULL;
 
 	this->m_Lock.Lock();
 	{
@@ -73,9 +73,9 @@ const LIB_SESSIONDATA* LIB_SESSIONPOOL::FindSession(LPCTSTR szName)
 	return pFindSession;
 }
 
-const LIB_SESSIONDATA* LIB_SESSIONPOOL::FindSessionID(WORD wID)
+const SessionData* LIB_SESSIONPOOL::FindSessionID(WORD wID)
 {
-	LIB_SESSIONDATA* pFindSession = NULL;
+	SessionData* pFindSession = NULL;
 
 	this->m_Lock.Lock();
 	{
@@ -86,7 +86,7 @@ const LIB_SESSIONDATA* LIB_SESSIONPOOL::FindSessionID(WORD wID)
 	return pFindSession;
 }
 
-const VOID LIB_SESSIONPOOL::InsertSession(LIB_SESSIONDATA* pSession)
+const VOID LIB_SESSIONPOOL::InsertSession(SessionData* pSession)
 {
 	this->m_Lock.Lock();
 	{
@@ -108,7 +108,7 @@ const WORD LIB_SESSIONPOOL::GetSessionSize()
 	return wSessionSize;
 }
 
-const VOID LIB_SESSIONPOOL::DeleteSession(LIB_SESSIONDATA* pSession)
+const VOID LIB_SESSIONPOOL::DeleteSession(SessionData* pSession)
 {
 	PLAYERMAP::iterator iter;
 
@@ -116,7 +116,7 @@ const VOID LIB_SESSIONPOOL::DeleteSession(LIB_SESSIONDATA* pSession)
 	{
 		for ( iter = m_mapPlayer.begin(); iter != m_mapPlayer.end(); iter++ )
 		{
-			LIB_SESSIONDATA* pFindSession = iter->second;
+			SessionData* pFindSession = iter->second;
 			if ( pSession )
 			{
 				if ( (pFindSession == pSession) && (pFindSession->GetSessionID() == pSession->GetSessionID()) )

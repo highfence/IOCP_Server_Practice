@@ -19,18 +19,20 @@ namespace CommonLib
 		PPerIoContext	sendContext;
 	}	PerSocketContext, *PPerSocketContext;
 
-	class LIB_SESSIONDATA
+	class SessionData
 	{
 	public :
-		LIB_SESSIONDATA(WORD wSessionID);
-		~LIB_SESSIONDATA();
-	private :
-		WORD				m_wSessionID;
-		BOOL				m_bIsReference;
+
+		SessionData(WORD wSessionID);
+		~SessionData();
+
 	public :
+
 		PerSocketContext	m_SocketCtx;
 		BYTE				wCryptKey;
+
 	public :
+
 		const	WORD	GetSessionID();
 		const	BOOL	GetReference();
 		const	VOID	SetReference();
@@ -38,7 +40,12 @@ namespace CommonLib
 		const	VOID	ClearSession();
 		const	VOID	ClearSocketContext();
 		const	VOID	CreateCryptKey();
+
+	private :
+
+		WORD				_sessionId;
+		BOOL				_isReference;
 	};
 
-	typedef std::map<DWORD, LIB_SESSIONDATA*> PLAYERMAP;
+	typedef std::map<DWORD, SessionData*> PLAYERMAP;
 }

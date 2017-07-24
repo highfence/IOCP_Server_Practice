@@ -23,7 +23,7 @@ const BOOL LIB_IOCPModule::START_IOCP()
 	return TRUE;
 }
 
-const BOOL LIB_IOCPModule::REGISTER_CLIENT(SOCKET ClientSocket, CommonLib::LIB_SESSIONDATA* Player)
+const BOOL LIB_IOCPModule::REGISTER_CLIENT(SOCKET ClientSocket, CommonLib::SessionData* Player)
 {
 	HANDLE hResult = INVALID_HANDLE_VALUE;
 	hResult = CreateIoCompletionPort((HANDLE)ClientSocket, m_CompletionPort, (ULONG_PTR)Player, 0);

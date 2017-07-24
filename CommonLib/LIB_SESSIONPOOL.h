@@ -3,7 +3,7 @@
 
 
 #include "Common.h"
-#include "LIB_SESSIONDATA.h"
+#include "SessionData.h"
 #include "Lock.h"
 
 namespace CommonLib
@@ -16,16 +16,16 @@ namespace CommonLib
 		~LIB_SESSIONPOOL();
 	private :
 		CriticalLock	m_Lock;
-		LIB_SESSIONDATA*	m_SessionBuffer[SESSION_NUM];
+		SessionData*	m_SessionBuffer[SESSION_NUM];
 		PLAYERMAP		m_mapPlayer;
 	public :
-		LIB_SESSIONDATA*	CreateSession();
-		const LIB_SESSIONDATA*	FindSession(WORD wSession);
-		const LIB_SESSIONDATA*	FindSession(LPCTSTR szName);
-		const LIB_SESSIONDATA*	FindSessionID(WORD wID);
-		const VOID			InsertSession(LIB_SESSIONDATA* pSession);
+		SessionData*	CreateSession();
+		const SessionData*	FindSession(WORD wSession);
+		const SessionData*	FindSession(LPCTSTR szName);
+		const SessionData*	FindSessionID(WORD wID);
+		const VOID			InsertSession(SessionData* pSession);
 		const WORD			GetSessionSize();
-		const VOID			DeleteSession(LIB_SESSIONDATA* pSession);
+		const VOID			DeleteSession(SessionData* pSession);
 		// GETSESSIONID
 	};
 }

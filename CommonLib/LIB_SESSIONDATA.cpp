@@ -1,81 +1,83 @@
 
-#include "LIB_SESSIONDATA.h"
+#include "SessionData.h"
 
-using namespace CommonLib;
-
-LIB_SESSIONDATA::LIB_SESSIONDATA(WORD wSessionID)
+namespace CommonLib
 {
-	m_wSessionID	= wSessionID;
-	m_bIsReference	= FALSE;
 
-	m_SocketCtx.recvContext = new PerIoContext;
-	m_SocketCtx.sendContext = new PerIoContext;
+	SessionData::SessionData(WORD wSessionID)
+	{
+		_sessionId = wSessionID;
+		_isReference = FALSE;
 
-	m_SocketCtx.clntSocket = INVALID_SOCKET;
-	ClearSocketContext();
-}
+		m_SocketCtx.recvContext = new PerIoContext;
+		m_SocketCtx.sendContext = new PerIoContext;
 
-LIB_SESSIONDATA::~LIB_SESSIONDATA()
-{
-	SAFE_DELETE_POINT(m_SocketCtx.recvContext);
-	SAFE_DELETE_POINT(m_SocketCtx.sendContext);
-}
+		m_SocketCtx.clntSocket = INVALID_SOCKET;
+		ClearSocketContext();
+	}
 
-const WORD LIB_SESSIONDATA::GetSessionID()
-{
-	return m_wSessionID;
-}
+	SessionData::~SessionData()
+	{
+		SAFE_DELETE_POINT(m_SocketCtx.recvContext);
+		SAFE_DELETE_POINT(m_SocketCtx.sendContext);
+	}
 
-const VOID LIB_SESSIONDATA::SetReference()
-{
-	m_bIsReference = TRUE;
-}
+	const WORD SessionData::GetSessionID()
+	{
+		return _sessionId;
+	}
 
-const BOOL LIB_SESSIONDATA::GetReference()
-{
-	return m_bIsReference;
-}
+	const VOID SessionData::SetReference()
+	{
+		_isReference = TRUE;
+	}
 
-const VOID LIB_SESSIONDATA::ClearSession()
-{
-	ClearSocketContext();
+	const BOOL SessionData::GetReference()
+	{
+		return _isReference;
+	}
 
-	m_bIsReference = FALSE;
-}
+	const VOID SessionData::ClearSession()
+	{
+		ClearSocketContext();
 
-const VOID LIB_SESSIONDATA::SetClientAddr(SOCKADDR_IN* pClntAddr)
-{
-	ZeroMemory(&m_SocketCtx.clntAddrInfo, sizeof(SOCKADDR_IN));
+		_isReference = FALSE;
+	}
 
-	m_SocketCtx.clntAddrInfo.sin_family			= pClntAddr->sin_family;
-	m_SocketCtx.clntAddrInfo.sin_port			= pClntAddr->sin_port;
-	m_SocketCtx.clntAddrInfo.sin_addr.s_addr	= pClntAddr->sin_addr.s_addr;
-}
+	const VOID SessionData::SetClientAddr(SOCKADDR_IN* pClntAddr)
+	{
+		ZeroMemory(&m_SocketCtx.clntAddrInfo, sizeof(SOCKADDR_IN));
 
-const VOID LIB_SESSIONDATA::CreateCryptKey()
-{
-	DWORD	dwTickCount = GetTickCount();
-	srand(dwTickCount);
-	wCryptKey = rand() & 255;
-}
+		m_SocketCtx.clntAddrInfo.sin_family = pClntAddr->sin_family;
+		m_SocketCtx.clntAddrInfo.sin_port = pClntAddr->sin_port;
+		m_SocketCtx.clntAddrInfo.sin_addr.s_addr = pClntAddr->sin_addr.s_addr;
+	}
 
-const VOID LIB_SESSIONDATA::ClearSocketContext()
-{
-	ZeroMemory(&m_SocketCtx.clntAddrInfo, sizeof(SOCKADDR_IN));
+	const VOID SessionData::CreateCryptKey()
+	{
+		DWORD	dwTickCount = GetTickCount();
+		srand(dwTickCount);
+		wCryptKey = rand() & 255;
+	}
 
-	ZeroMemory(&m_SocketCtx.recvContext->Buffer, MAX_BUFFER);
-	ZeroMemory(&m_SocketCtx.recvContext->wsaBuf, sizeof(WSABUF));
-	ZeroMemory(&m_SocketCtx.recvContext->overlapped, sizeof(WSAOVERLAPPED));
+	const VOID SessionData::ClearSocketContext()
+	{
+		ZeroMemory(&m_SocketCtx.clntAddrInfo, sizeof(SOCKADDR_IN));
 
-	ZeroMemory(&m_SocketCtx.sendContext->Buffer, MAX_BUFFER);
-	ZeroMemory(&m_SocketCtx.sendContext->wsaBuf, sizeof(WSABUF));
-	ZeroMemory(&m_SocketCtx.sendContext->overlapped, sizeof(WSAOVERLAPPED));
+		ZeroMemory(&m_SocketCtx.recvContext->Buffer, MAX_BUFFER);
+		ZeroMemory(&m_SocketCtx.recvContext->wsaBuf, sizeof(WSABUF));
+		ZeroMemory(&m_SocketCtx.recvContext->overlapped, sizeof(WSAOVERLAPPED));
 
-	SAFE_CLOSE_SOCKET(m_SocketCtx.clntSocket);
+		ZeroMemory(&m_SocketCtx.sendContext->Buffer, MAX_BUFFER);
+		ZeroMemory(&m_SocketCtx.sendContext->wsaBuf, sizeof(WSABUF));
+		ZeroMemory(&m_SocketCtx.sendContext->overlapped, sizeof(WSAOVERLAPPED));
 
-	m_SocketCtx.recvContext->wsaBuf.buf = m_SocketCtx.recvContext->Buffer;
-	m_SocketCtx.recvContext->wsaBuf.len = MAX_BUFFER;
+		SAFE_CLOSE_SOCKET(m_SocketCtx.clntSocket);
 
-	m_SocketCtx.sendContext->wsaBuf.buf = m_SocketCtx.sendContext->Buffer;
-	m_SocketCtx.sendContext->wsaBuf.len	= MAX_BUFFER;
+		m_SocketCtx.recvContext->wsaBuf.buf = m_SocketCtx.recvContext->Buffer;
+		m_SocketCtx.recvContext->wsaBuf.len = MAX_BUFFER;
+
+		m_SocketCtx.sendContext->wsaBuf.buf = m_SocketCtx.sendContext->Buffer;
+		m_SocketCtx.sendContext->wsaBuf.len = MAX_BUFFER;
+	}
 }

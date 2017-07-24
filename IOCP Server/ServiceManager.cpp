@@ -3,7 +3,7 @@
 #include "ServiceManager.h"
 #include "../NetworkLib/InitialNetwork.h"
 #include "../NetworkLib/LIB_WINSOCKERRCODE.h"
-#include "../CommonLib/LIB_SESSIONDATA.h"
+#include "../CommonLib/SessionData.h"
 #include "../CommonLib/Protocol.h"
 #include "../CommonLib/Profile.h"
 
@@ -327,7 +327,7 @@ const BOOL ServiceManager::AcceptThread()
 		if ( SOCKET_ERROR == setsockopt(hClntSock, SOL_SOCKET, SO_SNDBUF, (const char*)&nZero, sizeof(nZero)) )
 			continue;
 
-		LIB_SESSIONDATA* pSession = m_SessionPool.CreateSession();
+		SessionData* pSession = m_SessionPool.CreateSession();
 		pSession->m_SocketCtx.clntSocket = hClntSock;
 		pSession->SetClientAddr(&clntAddr);
 
@@ -394,7 +394,7 @@ const BOOL ServiceManager::WorkerThread()
 {
 	DWORD				dwSizeInOutData = 0;
 	DWORD				dwResult = 0;
-	LIB_SESSIONDATA*	pSession = NULL;
+	SessionData*	pSession = NULL;
 	PPerIoContext		pPerIoCtx = NULL;
 
 	while ( m_WorkerThread.IsRun() )
@@ -496,7 +496,7 @@ const BOOL ServiceManager::SendThread()
 	return TRUE;
 }
 
-const BOOL ServiceManager::PacketProcess(LIB_SESSIONDATA* pSession)
+const BOOL ServiceManager::PacketProcess(SessionData* pSession)
 {
 	BOOL bReturn = TRUE;
 

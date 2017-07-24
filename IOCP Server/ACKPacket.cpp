@@ -4,7 +4,7 @@
 
 using namespace NETWORKLIB;
 
-const BOOL ServiceManager::RecvCS_AUTH_LOGIN_ACK(LIB_SESSIONDATA* pSession)
+const BOOL ServiceManager::RecvCS_AUTH_LOGIN_ACK(SessionData* pSession)
 {
 	ZeroMemory(pSession->m_SocketCtx.sendContext, MAX_BUFFER);
 

@@ -4,7 +4,7 @@
 
 using namespace NETWORKLIB;
 
-const BOOL ServiceManager::RecvCS_AUTH_LOGIN_REQ(LIB_SESSIONDATA* pSession)
+const BOOL ServiceManager::RecvCS_AUTH_LOGIN_REQ(SessionData* pSession)
 {
 	WCHAR	Buffer[MAX_BUFFER];
 	static UINT snCount = 0;	// 이 static 변수도 테스트 때문에 남긴거라서 삭제해도 됩니다

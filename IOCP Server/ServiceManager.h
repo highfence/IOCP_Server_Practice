@@ -54,7 +54,7 @@ private :	// Member Variables of ServiceMain
 	LIB_SERVERINFO		m_ServerInfo;
 	LIB_SESSIONPOOL		m_SessionPool;
 	CriticalLock	m_Lock;
-	LIB_SESSIONDATA*	m_SendCtx;
+	SessionData*	m_SendCtx;
 	HANDLE				m_hStopEvent;
 	HANDLE				m_hSendEvent;
 
@@ -70,10 +70,10 @@ private :	// Function of Thread
 	const BOOL	SendThread();
 
 private :	// REQ PACKET
-	const BOOL	PacketProcess(LIB_SESSIONDATA* pSession);
-	const BOOL	RecvCS_AUTH_LOGIN_REQ(LIB_SESSIONDATA* pSession);
+	const BOOL	PacketProcess(SessionData* pSession);
+	const BOOL	RecvCS_AUTH_LOGIN_REQ(SessionData* pSession);
 private :	// ACK PACKET
-	const BOOL	RecvCS_AUTH_LOGIN_ACK(LIB_SESSIONDATA* pSession);
+	const BOOL	RecvCS_AUTH_LOGIN_ACK(SessionData* pSession);
 	
 };
 

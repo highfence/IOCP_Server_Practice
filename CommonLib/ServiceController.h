@@ -26,12 +26,15 @@ namespace CommonLib
 		SERVICESTATE_ERROR			= 0x00000102,	// unknown error
 	};
 
-	class LIB_SERVICECTRL
+	class ServiceController
 	{
 	public :
+
 		static	SERVICE_STATUS_HANDLE	theServiceStatusHandle;
 		static	SERVICE_STATUS			theServiceStatus;
+
 	public :
+
 		static	const	BOOL	InstallServer(const LPCTSTR strServiceName, const LPCTSTR strServiceDir);
 		static	const	BOOL	UnInstallServer(const LPCTSTR strServiceName);
 		static	const	BOOL	ServiceStart(const LPCTSTR szServiceName);
