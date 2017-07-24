@@ -4,7 +4,7 @@
 
 #include "Common.h"
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	/*
 	 *	Make a person	: 이재득
@@ -13,16 +13,12 @@ namespace COMMONLIB
 	 *	Class describe	: INI 파일로부터 텍스트를 READ 하거나 WRITE 를 가능하게하는 클래스
 	*/
 
-	class LIB_PROFILE
+	class Profile
 	{
 	public :
 
-		LIB_PROFILE();
-		~LIB_PROFILE();
-
-	private :
-
-		TCHAR	m_FilePath[MAX_STRING];
+		Profile();
+		~Profile();
 
 	public :
 
@@ -32,5 +28,10 @@ namespace COMMONLIB
 		const VOID	GetStringFromINI(LPCWSTR strSection, LPCWSTR strKey, LPWSTR strResult);
 		const DWORD	GetDWORDFromINI(LPCWSTR strSection, LPCWSTR strKey);
 		const BOOL	DeleteINI();
+
+	private :
+
+		TCHAR _filePath[MAX_STRING];
+
 	};
 }

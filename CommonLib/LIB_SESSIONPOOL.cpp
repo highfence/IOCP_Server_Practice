@@ -1,7 +1,7 @@
 
 #include "LIB_SESSIONPOOL.h"
 
-using namespace COMMONLIB;
+using namespace CommonLib;
 
 LIB_SESSIONPOOL::LIB_SESSIONPOOL()
 {

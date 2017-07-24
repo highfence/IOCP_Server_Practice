@@ -1,7 +1,7 @@
 
 #include "LogSystem.h"
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	LogSystem::LogSystem()
 	{

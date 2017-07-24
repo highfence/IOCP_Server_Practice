@@ -2,7 +2,7 @@
 
 #include "Common.h"
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	typedef struct tagPerIoContext
 	{

@@ -22,7 +22,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Lock.h" />
     <ClInclude Include="LogSystem.h" />
-    <ClInclude Include="LIB_PROFILE.h" />
+    <ClInclude Include="Profile.h" />
     <ClInclude Include="LIB_SERVERSYSTEM.h" />
     <ClInclude Include="LIB_SERVICECTRL.h" />
     <ClInclude Include="LIB_SESSIONDATA.h" />
@@ -32,7 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogSystem.cpp" />
-    <ClCompile Include="LIB_PROFILE.cpp" />
+    <ClCompile Include="Profile.cpp" />
     <ClCompile Include="LIB_SERVICECTRL.cpp" />
     <ClCompile Include="LIB_SESSIONDATA.cpp" />
     <ClCompile Include="LIB_SESSIONPOOL.cpp" />

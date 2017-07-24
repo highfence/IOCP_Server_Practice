@@ -3,7 +3,7 @@
 #include "Common.h"
 #include "Lock.h"
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	enum ENUM_LOGSYSTEM
 	{

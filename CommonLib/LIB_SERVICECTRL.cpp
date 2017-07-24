@@ -1,7 +1,7 @@
 
 #include "LIB_SERVICECTRL.h"
 
-using namespace COMMONLIB;
+using namespace CommonLib;
 
 SERVICE_STATUS_HANDLE LIB_SERVICECTRL::theServiceStatusHandle = (SERVICE_STATUS_HANDLE)0;
 SERVICE_STATUS LIB_SERVICECTRL::theServiceStatus;

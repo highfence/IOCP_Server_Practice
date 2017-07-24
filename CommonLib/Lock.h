@@ -1,6 +1,6 @@
 #pragma once
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	/*
 	 *	Make a person	: ¿Ã¿ÁµÊ

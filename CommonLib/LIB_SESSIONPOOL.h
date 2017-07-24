@@ -6,7 +6,7 @@
 #include "LIB_SESSIONDATA.h"
 #include "Lock.h"
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	// 템플릿으로 수정할 것
 	class LIB_SESSIONPOOL

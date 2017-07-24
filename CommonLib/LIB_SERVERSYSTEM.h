@@ -2,7 +2,7 @@
 
 #include "Common.h"
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	const wchar_t NAME_TESTSERVER[MAX_STRING]	= _T("TestServer");
 

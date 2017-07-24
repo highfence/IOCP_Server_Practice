@@ -5,7 +5,7 @@
 #include "Common.h"
 #include <vector>
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	enum ENUM_THREAD
 	{

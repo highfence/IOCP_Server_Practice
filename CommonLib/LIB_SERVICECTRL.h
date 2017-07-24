@@ -4,7 +4,7 @@
 
 #include "Common.h"
 
-namespace COMMONLIB
+namespace CommonLib
 {
 	/*
 	 *	Make a person	: ¿Ã¿ÁµÊ

@@ -2,7 +2,7 @@
 #include "LIB_THREAD.h"
 #include <process.h>
 
-using namespace COMMONLIB;
+using namespace CommonLib;
 
 LIB_THREAD::LIB_THREAD()
 {

@@ -1,7 +1,7 @@
 
 #include "LIB_SESSIONDATA.h"
 
-using namespace COMMONLIB;
+using namespace CommonLib;
 
 LIB_SESSIONDATA::LIB_SESSIONDATA(WORD wSessionID)
 {

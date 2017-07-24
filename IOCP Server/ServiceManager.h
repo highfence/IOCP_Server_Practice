@@ -12,7 +12,7 @@
 #include "../CommonLib/Lock.h"
 #include "../NetworkLib/LIB_IOCPModule.h"
 
-using namespace COMMONLIB;
+using namespace CommonLib;
 using namespace NETWORKLIB;
 
 class ServiceManager

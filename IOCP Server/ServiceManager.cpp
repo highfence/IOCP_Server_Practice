@@ -5,7 +5,7 @@
 #include "../NetworkLib/LIB_WINSOCKERRCODE.h"
 #include "../CommonLib/LIB_SESSIONDATA.h"
 #include "../CommonLib/Protocol.h"
-#include "../CommonLib/LIB_PROFILE.h"
+#include "../CommonLib/Profile.h"
 
 ServiceManager::ServiceManager()
 {
@@ -81,7 +81,7 @@ const BOOL ServiceManager::InitialProfile()
 	::_wsplitpath(szBuffer, szDrive, szDir, szFileName, szFileExt);
 	wsprintf(szIniPath, L"%s%s%s.ini", szDrive, szDir, szFileName);
 
-	LIB_PROFILE	Profile;
+	Profile	Profile;
 	Profile.SetFilePath(szIniPath);
 
 	/*

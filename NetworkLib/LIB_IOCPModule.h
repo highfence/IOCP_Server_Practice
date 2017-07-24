@@ -18,7 +18,7 @@ namespace NETWORKLIB
 		HANDLE	m_CompletionPort;
 	public :
 		const BOOL		START_IOCP();
-		const BOOL		REGISTER_CLIENT(SOCKET ClientSocket, COMMONLIB::LIB_SESSIONDATA* Player);	// 템플릿 가능할까?
+		const BOOL		REGISTER_CLIENT(SOCKET ClientSocket, CommonLib::LIB_SESSIONDATA* Player);	// 템플릿 가능할까?
 		const HANDLE	GetCompletionPort();
 	};
 }
