@@ -2,7 +2,7 @@
 #include "ServiceManager.h"
 #include "../CommonLib/Protocol.h"
 
-using namespace NETWORKLIB;
+using namespace NetworkLib;
 
 const BOOL ServiceManager::RecvCS_AUTH_LOGIN_REQ(SessionData* pSession)
 {

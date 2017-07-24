@@ -1,10 +1,6 @@
-
 #pragma once
 
-#ifndef __LIB_WINSOCKERRCODE_H__
-#define __LIB_WINSOCKERRCODE_H__
-
-namespace NETWORKLIB
+namespace NetworkLib
 {
 	struct WinSockErrorCodeTable
 	{
@@ -83,5 +79,3 @@ namespace NETWORKLIB
 		return NULL;
 	}
 }
-
-#endif	// __LIB_WINSOCKERRCODE_H__

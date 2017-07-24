@@ -10,10 +10,10 @@
 #include "../CommonLib/LogSystem.h"
 #include "../CommonLib/ServerSystem.h"
 #include "../CommonLib/Lock.h"
-#include "../NetworkLib/LIB_IOCPModule.h"
+#include "../NetworkLib/IOCPModule.h"
 
 using namespace CommonLib;
-using namespace NETWORKLIB;
+using namespace NetworkLib;
 
 class ServiceManager
 {
@@ -50,7 +50,7 @@ private :	// Member Variables of ServiceMain
 	SingleThread	m_AcceptThread;
 	SingleThread	m_ControlThread;
 	SingleThread	m_SendThread;
-	LIB_IOCPModule		m_IOCP;
+	IOCPModule		m_IOCP;
 	ServerInfo		m_ServerInfo;
 	SessionPool		m_SessionPool;
 	CriticalLock	m_Lock;

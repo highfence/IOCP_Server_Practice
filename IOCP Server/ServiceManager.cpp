@@ -114,10 +114,10 @@ const BOOL ServiceManager::InitialProfile()
 
 const BOOL ServiceManager::InitialNetwork()
 {
-	if ( START_NETWORK() != TRUE )
+	if ( StartNetwork() != TRUE )
 		return FALSE;
 
-	if ( m_IOCP.START_IOCP() != TRUE )
+	if ( m_IOCP.StartIOCP() != TRUE )
 		return FALSE;
 
 	return TRUE;
@@ -213,7 +213,7 @@ const BOOL ServiceManager::StopServer()
 
 	m_Log.EventLog(2, L"StopServer", L"Release OK : WorkerThread");
 
-	if ( END_NETWORK() != TRUE )
+	if ( EndNetwork() != TRUE )
 	{
 		m_Log.EventLog(2, L"StopServer", L"Release Fail : END_NETWORK");
 		return FALSE;
@@ -333,7 +333,7 @@ const BOOL ServiceManager::AcceptThread()
 
 		m_SessionPool.InsertSession(pSession);
 
-		if ( m_IOCP.REGISTER_CLIENT(hClntSock, pSession) != TRUE )
+		if ( m_IOCP.RegisterCilent(hClntSock, pSession) != TRUE )
 		{
 //			m_Log.EventLog();
 			continue;

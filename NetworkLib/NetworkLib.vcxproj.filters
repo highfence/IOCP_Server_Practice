@@ -18,15 +18,15 @@
     <ClInclude Include="InitialNetwork.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LIB_IOCPModule.h">
+    <ClInclude Include="LIB_WINSOCKERRCODE.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LIB_WINSOCKERRCODE.h">
+    <ClInclude Include="IOCPModule.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LIB_IOCPModule.cpp">
+    <ClCompile Include="IOCPModule.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,12 +1,8 @@
-
 #pragma once
 
-#ifndef __INITIALNETWORK_H__
-#define __INITIALNETWORK_H__
-
-namespace NETWORKLIB
+namespace NetworkLib
 {
-	static BOOL START_NETWORK()
+	static BOOL StartNetwork()
 	{
 		WSADATA	wsaData;
 		if ( WSAStartup(MAKEWORD(2, 2), &wsaData) != 0 )
@@ -15,7 +11,7 @@ namespace NETWORKLIB
 		return TRUE;
 	}
 
-	static BOOL END_NETWORK()
+	static BOOL EndNetwork()
 	{
 		if ( WSACleanup() == SOCKET_ERROR )
 			return FALSE;
@@ -23,5 +19,3 @@ namespace NETWORKLIB
 		return TRUE;
 	}
 }
-
-#endif	// __INITIALNETWORK_H__

@@ -20,11 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InitialNetwork.h" />
-    <ClInclude Include="LIB_IOCPModule.h" />
+    <ClInclude Include="IOCPModule.h" />
     <ClInclude Include="LIB_WINSOCKERRCODE.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LIB_IOCPModule.cpp" />
+    <ClCompile Include="IOCPModule.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
