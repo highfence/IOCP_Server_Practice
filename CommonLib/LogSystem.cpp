@@ -144,12 +144,10 @@ namespace CommonLib
 	{
 		DWORD dwWritten = 0;
 
-		_Lock.Lock();
+		if (WriteFile(_fileHandle, szWrite, (DWORD)wcslen(szWrite), &dwWritten, NULL) != TRUE)
 		{
-			if (WriteFile(_fileHandle, szWrite, (DWORD)wcslen(szWrite), &dwWritten, NULL) != TRUE)
-				return FALSE;
+			return FALSE;
 		}
-		_Lock.UnLock();
 
 		return TRUE;
 	}
