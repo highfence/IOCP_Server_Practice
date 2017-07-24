@@ -28,7 +28,7 @@ namespace CommonLib
 
 	public :
 
-		PerSocketContext	m_SocketCtx;
+		PerSocketContext	_SocketContext;
 		BYTE				wCryptKey;
 
 	public :
@@ -47,5 +47,4 @@ namespace CommonLib
 		BOOL				_isReference;
 	};
 
-	typedef std::map<DWORD, SessionData*> PLAYERMAP;
 }

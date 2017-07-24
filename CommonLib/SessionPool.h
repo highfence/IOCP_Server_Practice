@@ -1,11 +1,15 @@
 #pragma once
 
+#include <vector>
 #include "Common.h"
 #include "SessionData.h"
 #include "Lock.h"
 
 namespace CommonLib
 {
+	using SessionId = DWORD;
+	using SessionVector = std::vector<SessionData*>;
+
 	// 템플릿으로 수정할 것
 	class SessionPool
 	{
@@ -29,6 +33,6 @@ namespace CommonLib
 
 		CriticalLock	_lock;
 		SessionData*	_sessionBuffer[SESSION_NUM];
-		PLAYERMAP		_mapPlayer;
+		SessionVector	_playerVec;
 	};
 }

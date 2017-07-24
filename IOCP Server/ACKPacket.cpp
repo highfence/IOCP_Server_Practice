@@ -6,7 +6,7 @@ using namespace NetworkLib;
 
 const BOOL ServiceManager::recvCS_AUTH_LOGIN_ACK(SessionData* pSession)
 {
-	ZeroMemory(pSession->m_SocketCtx.sendContext, MAX_BUFFER);
+	ZeroMemory(pSession->_SocketContext.sendContext, MAX_BUFFER);
 
 	SYSTEMTIME st;
 	GetSystemTime(&st);
@@ -15,7 +15,7 @@ const BOOL ServiceManager::recvCS_AUTH_LOGIN_ACK(SessionData* pSession)
 
 	wsprintf(szTime, L"%d/%d/%ds/%dms", st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 
-	memcpy(&pSession->m_SocketCtx.sendContext->Buffer, szTime, wcslen(szTime));
+	memcpy(&pSession->_SocketContext.sendContext->Buffer, szTime, wcslen(szTime));
 
 	_lock.Lock();
 	{

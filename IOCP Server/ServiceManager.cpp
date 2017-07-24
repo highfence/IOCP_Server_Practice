@@ -328,7 +328,7 @@ const BOOL ServiceManager::acceptThread()
 			continue;
 
 		SessionData* pSession = _sessionPool.CreateSession();
-		pSession->m_SocketCtx.clntSocket = hClntSock;
+		pSession->_SocketContext.clntSocket = hClntSock;
 		pSession->SetClientAddr(&clntAddr);
 
 		_sessionPool.InsertSession(pSession);
@@ -339,7 +339,7 @@ const BOOL ServiceManager::acceptThread()
 			continue;
 		}
 
-		int nRet = WSARecv(hClntSock, &(pSession->m_SocketCtx.recvContext->wsaBuf), 1, &dwRecvByte, &dwFlags, &(pSession->m_SocketCtx.recvContext->overlapped), NULL);
+		int nRet = WSARecv(hClntSock, &(pSession->_SocketContext.recvContext->wsaBuf), 1, &dwRecvByte, &dwFlags, &(pSession->_SocketContext.recvContext->overlapped), NULL);
 
 		if ( SOCKET_ERROR == nRet )
 		{
@@ -430,15 +430,15 @@ const BOOL ServiceManager::workerThread()
 				continue;
 			}
 			
-			if ( pPerIoCtx == pSession->m_SocketCtx.recvContext )
+			if ( pPerIoCtx == pSession->_SocketContext.recvContext )
 			{
 				// 보낸 패킷의 사이즈만큼 받아서 처리할 것
 				packetProcess(pSession);
 				
 				DWORD dwFlags = 0;	// out parameter, and I/O 처리가 끝나면 꼭 해당 소켓에 recv 를 걸어둔다.
-				WSARecv(pSession->m_SocketCtx.clntSocket, &(pSession->m_SocketCtx.recvContext->wsaBuf), 1, NULL, &dwFlags, &(pSession->m_SocketCtx.recvContext->overlapped), NULL);
+				WSARecv(pSession->_SocketContext.clntSocket, &(pSession->_SocketContext.recvContext->wsaBuf), 1, NULL, &dwFlags, &(pSession->_SocketContext.recvContext->overlapped), NULL);
 			}
-			else if ( pPerIoCtx == pSession->m_SocketCtx.sendContext )
+			else if ( pPerIoCtx == pSession->_SocketContext.sendContext )
 			{
 				// WSASend 가 호출되고나서 Entry Point 가 여기로 온다. 마땅히 처리할 내용이 없다
 			}
@@ -477,7 +477,7 @@ const BOOL ServiceManager::sendThread()
 
 		if ( _sendCtx != NULL )
 		{
-			int nReturn = ::WSASend(_sendCtx->m_SocketCtx.clntSocket, &_sendCtx->m_SocketCtx.sendContext->wsaBuf, 1, &dwSendBytes, dwFlags, &_sendCtx->m_SocketCtx.sendContext->overlapped, NULL);
+			int nReturn = ::WSASend(_sendCtx->_SocketContext.clntSocket, &_sendCtx->_SocketContext.sendContext->wsaBuf, 1, &dwSendBytes, dwFlags, &_sendCtx->_SocketContext.sendContext->overlapped, NULL);
 
 			if ( nReturn == SOCKET_ERROR )
 			{
@@ -501,7 +501,7 @@ const BOOL ServiceManager::packetProcess(SessionData* pSession)
 	BOOL bReturn = TRUE;
 
 	header_special	Header;
-	memcpy(&Header, pSession->m_SocketCtx.recvContext->Buffer, SIZE_HEADER);
+	memcpy(&Header, pSession->_SocketContext.recvContext->Buffer, SIZE_HEADER);
 
 	switch ( Header.command )
 	{

@@ -20,22 +20,22 @@ namespace CommonLib
 			for (WORD iter = 0; iter < SESSION_NUM; iter++)
 				SAFE_DELETE_POINT(_sessionBuffer[iter]);
 
-			_mapPlayer.clear();
+			_playerVec.clear();
 		}
 		this->_lock.UnLock();
 	}
 
 	SessionData* SessionPool::CreateSession()
 	{
-		SessionData* pPlayer = NULL;
+		SessionData* pPlayer = nullptr;
 
 		this->_lock.Lock();
 		{
 			for (int iter = 0; iter < SESSION_NUM; iter++)
 			{
-				if (TRUE != _sessionBuffer[iter]->GetReference())	// empty session 이면
+				// empty session 이면
+				if (_sessionBuffer[iter]->GetReference() == FALSE)	
 				{
-					//				m_SessionBuffer[iter]->ClearSession();	// 혹시나 모르니까 한 번더 깨끗이 비운다.
 					_sessionBuffer[iter]->SetReference();	// session 사용중으로 바꾼다.
 					pPlayer = _sessionBuffer[iter];
 					break;
@@ -49,7 +49,7 @@ namespace CommonLib
 
 	const SessionData* SessionPool::FindSession(WORD wSession)
 	{
-		SessionData* pFindSession = NULL;
+		SessionData* pFindSession = nullptr;
 
 		this->_lock.Lock();
 		{
@@ -62,7 +62,7 @@ namespace CommonLib
 
 	const SessionData* SessionPool::FindSession(LPCTSTR szName)
 	{
-		SessionData* pFindSession = NULL;
+		SessionData* pFindSession = nullptr;
 
 		this->_lock.Lock();
 		{
@@ -75,7 +75,7 @@ namespace CommonLib
 
 	const SessionData* SessionPool::FindSessionID(WORD wID)
 	{
-		SessionData* pFindSession = NULL;
+		SessionData* pFindSession = nullptr;
 
 		this->_lock.Lock();
 		{
@@ -88,9 +88,14 @@ namespace CommonLib
 
 	const VOID SessionPool::InsertSession(SessionData* pSession)
 	{
+		if (pSession == nullptr)
+		{
+			return;
+		}
+
 		this->_lock.Lock();
 		{
-			_mapPlayer.insert(PLAYERMAP::value_type(pSession->GetSessionID(), pSession));
+			_playerVec.emplace_back(std::move(pSession));
 		}
 		this->_lock.UnLock();
 	}
@@ -101,7 +106,7 @@ namespace CommonLib
 
 		this->_lock.Lock();
 		{
-			wSessionSize = (WORD)_mapPlayer.size();
+			wSessionSize = (WORD)_playerVec.size();
 		}
 		this->_lock.UnLock();
 
@@ -110,21 +115,22 @@ namespace CommonLib
 
 	const VOID SessionPool::DeleteSession(SessionData* pSession)
 	{
-		PLAYERMAP::iterator iter;
+		if (pSession == nullptr)
+		{
+			return;
+		}
 
 		this->_lock.Lock();
 		{
-			for (iter = _mapPlayer.begin(); iter != _mapPlayer.end(); iter++)
+			for (SessionVector::size_type i = 0; i < _playerVec.size();)
 			{
-				SessionData* pFindSession = iter->second;
-				if (pSession)
+				if ((_playerVec[i] == pSession) && (_playerVec[i]->GetSessionID() == pSession->GetSessionID()))
 				{
-					if ((pFindSession == pSession) && (pFindSession->GetSessionID() == pSession->GetSessionID()))
-					{
-						pFindSession->ClearSession();
-						_mapPlayer.erase(iter);
-						break;
-					}
+					_playerVec.erase(_playerVec.begin() + i);
+				}
+				else
+				{
+					++i;
 				}
 			}
 		}

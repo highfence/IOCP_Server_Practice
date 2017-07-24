@@ -11,7 +11,7 @@ const BOOL ServiceManager::recvCS_AUTH_LOGIN_REQ(SessionData* pSession)
 
 	body_CS_AUTH_LOGIN_REQ* body = (body_CS_AUTH_LOGIN_REQ*)(Buffer + SIZE_HEADER);
 
-	memcpy(&Buffer, &pSession->m_SocketCtx.recvContext->Buffer, sizeof(body_CS_AUTH_LOGIN_REQ) + SIZE_HEADER);
+	memcpy(&Buffer, &pSession->_SocketContext.recvContext->Buffer, sizeof(body_CS_AUTH_LOGIN_REQ) + SIZE_HEADER);
 
 	int id = body->id;
 	int pw = body->pw;
