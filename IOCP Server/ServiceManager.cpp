@@ -78,7 +78,7 @@ const BOOL ServiceManager::initialProfile()
 	WCHAR	szIniPath[MAX_STRING]	= _T("");
 
 	::GetModuleFileName(GetModuleHandle(NULL), szBuffer, MAX_STRING);
-	::_wsplitpath(szBuffer, szDrive, szDir, szFileName, szFileExt);
+	::_wsplitpath_s(szBuffer, szDrive, szDir, szFileName, szFileExt);
 	wsprintf(szIniPath, L"%s%s%s.ini", szDrive, szDir, szFileName);
 
 	Profile	Profile;
@@ -103,8 +103,8 @@ const BOOL ServiceManager::initialProfile()
 	Profile.GetStringFromINI(L"SERVER", L"SERVER_IP", m_ServerInfo.szServerIP);
 	*/
 
-	wcscpy(_serverInfo.szServerName, L"GameServer");
-	wcscpy(_serverInfo.szServerIP, L"127.0.0.1");
+	wcscpy_s(_serverInfo.szServerName, L"GameServer");
+	wcscpy_s(_serverInfo.szServerIP, L"127.0.0.1");
 
 	if ( _serverInfo.dwWorldID == 0 )
 		return FALSE;
