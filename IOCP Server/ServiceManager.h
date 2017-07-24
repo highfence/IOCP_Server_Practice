@@ -6,9 +6,9 @@
 
 #include "../CommonLib/Common.h"
 #include "../CommonLib/SessionPool.h"
-#include "../CommonLib/LIB_THREAD.h"
+#include "../CommonLib/Thread.h"
 #include "../CommonLib/LogSystem.h"
-#include "../CommonLib/LIB_SERVERSYSTEM.h"
+#include "../CommonLib/ServerSystem.h"
 #include "../CommonLib/Lock.h"
 #include "../NetworkLib/LIB_IOCPModule.h"
 
@@ -46,12 +46,12 @@ public :	// Log System
 
 private :	// Member Variables of ServiceMain
 
-	LIB_MULTITHREAD		m_WorkerThread;
-	LIB_SINGLETHREAD	m_AcceptThread;
-	LIB_SINGLETHREAD	m_ControlThread;
-	LIB_SINGLETHREAD	m_SendThread;
+	MultiThread		m_WorkerThread;
+	SingleThread	m_AcceptThread;
+	SingleThread	m_ControlThread;
+	SingleThread	m_SendThread;
 	LIB_IOCPModule		m_IOCP;
-	LIB_SERVERINFO		m_ServerInfo;
+	ServerInfo		m_ServerInfo;
 	SessionPool		m_SessionPool;
 	CriticalLock	m_Lock;
 	SessionData*	m_SendCtx;

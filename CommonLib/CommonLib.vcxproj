@@ -23,11 +23,11 @@
     <ClInclude Include="Lock.h" />
     <ClInclude Include="LogSystem.h" />
     <ClInclude Include="Profile.h" />
-    <ClInclude Include="LIB_SERVERSYSTEM.h" />
+    <ClInclude Include="ServerSystem.h" />
     <ClInclude Include="ServiceController.h" />
     <ClInclude Include="SessionData.h" />
     <ClInclude Include="SessionPool.h" />
-    <ClInclude Include="LIB_THREAD.h" />
+    <ClInclude Include="Thread.h" />
     <ClInclude Include="Protocol.h" />
   </ItemGroup>
   <ItemGroup>

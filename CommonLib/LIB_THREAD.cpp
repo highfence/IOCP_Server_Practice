@@ -1,49 +1,49 @@
 
-#include "LIB_THREAD.h"
+#include "Thread.h"
 #include <process.h>
 
 using namespace CommonLib;
 
-LIB_THREAD::LIB_THREAD()
+Thread::Thread()
 {
-	m_bRun	= FALSE;
-	m_bRun			=	FALSE;
-	m_hThreadHandle	=	NULL;
-	m_nThreadID		=	0;
+	_isRun	= FALSE;
+	_isRun			=	FALSE;
+	_threadHandle	=	NULL;
+	_threadID		=	0;
 }
 
-LIB_THREAD::~LIB_THREAD()
+Thread::~Thread()
 {
-	if ( m_hThreadHandle != NULL )
+	if ( _threadHandle != NULL )
 		StopThread();
 }
 
-const BOOL LIB_THREAD::StartThread()
+const BOOL Thread::StartThread()
 {
-	m_bRun	=	TRUE;
+	_isRun	=	TRUE;
 	
-	m_hThreadHandle = (HANDLE)::_beginthreadex(NULL, 0, ThreadFunc, (LPVOID)this, 0, &m_nThreadID);
+	_threadHandle = (HANDLE)::_beginthreadex(NULL, 0, ThreadFunc, (LPVOID)this, 0, &_threadID);
 
-	if ( m_hThreadHandle == NULL )
+	if ( _threadHandle == NULL )
 	{
-		m_bRun = FALSE;
+		_isRun = FALSE;
 		return FALSE;
 	}
 
 	return TRUE;
 }
 
-const BOOL LIB_THREAD::StopThread()
+const BOOL Thread::StopThread()
 {
-	if ( m_hThreadHandle != NULL )
+	if ( _threadHandle != NULL )
 	{
-		if ( WaitForSingleObject(m_hThreadHandle, THREAD_EXITTIME) == WAIT_TIMEOUT )
+		if ( WaitForSingleObject(_threadHandle, THREAD_EXITTIME) == WAIT_TIMEOUT )
 		{
-			if ( TerminateThread(m_hThreadHandle, 0) )
+			if ( TerminateThread(_threadHandle, 0) )
 			{
-				m_bRun	=	FALSE;
-				CloseHandle(m_hThreadHandle);
-				m_hThreadHandle = NULL;
+				_isRun	=	FALSE;
+				CloseHandle(_threadHandle);
+				_threadHandle = NULL;
 			}
 		}
 	}
@@ -53,9 +53,9 @@ const BOOL LIB_THREAD::StopThread()
 	return TRUE;
 }
 
-UINT WINAPI LIB_THREAD::ThreadFunc(LPVOID lpParam)
+UINT WINAPI Thread::ThreadFunc(LPVOID lpParam)
 {
-	LIB_THREAD* pThis = (LIB_THREAD*)lpParam;
+	Thread* pThis = (Thread*)lpParam;
 	if ( pThis )
 		return pThis->Run();
 	else
@@ -66,46 +66,46 @@ UINT WINAPI LIB_THREAD::ThreadFunc(LPVOID lpParam)
 
 //////////////////////////////////////////////////////////////////////////
 
-LIB_MULTITHREAD::LIB_MULTITHREAD()
+MultiThread::MultiThread()
 {
-	m_bRun	= FALSE;
+	_isRun	= FALSE;
 }
 
-LIB_MULTITHREAD::~LIB_MULTITHREAD()
+MultiThread::~MultiThread()
 {
-	int nSize = (int)m_vecThread.size();
+	int nSize = (int)_threadVec.size();
 
 	for ( int iter = 0; iter < nSize; iter++ )
 	{
-		LIB_SINGLETHREAD* pThread = m_vecThread[iter];
+		SingleThread* pThread = _threadVec[iter];
 		if ( pThread )
 			delete pThread;
 	}
 
-	m_vecThread.clear();
+	_threadVec.clear();
 }
 
-const VOID LIB_MULTITHREAD::Initialize(const int nSize, const LPVOID lpParam, const LPTHREADCALLBACK lpFunc)
+const VOID MultiThread::Initialize(const int nSize, const LPVOID lpParam, const ThreadCallBackFunc lpFunc)
 {
 	for ( int iter = 0; iter < nSize; iter++ )
 	{
-		LIB_SINGLETHREAD* pThread = new LIB_SINGLETHREAD;
+		SingleThread* pThread = new SingleThread;
 		if ( pThread )
 		{
 			pThread->Initialize(lpParam, lpFunc);
-			m_vecThread.push_back(SINGLETHREAD::value_type(pThread));
+			_threadVec.push_back(SINGLETHREAD::value_type(pThread));
 		}
 	}
 }
 
-const UINT LIB_MULTITHREAD::StartMultiThread()
+const UINT MultiThread::StartMultiThread()
 {
-	m_bRun		= TRUE;
-	int nSize	= (int)m_vecThread.size();
+	_isRun		= TRUE;
+	int nSize	= (int)_threadVec.size();
 
 	for ( int iter = 0; iter < nSize; iter++ )
 	{
-		LIB_SINGLETHREAD* pThread = m_vecThread[iter];
+		SingleThread* pThread = _threadVec[iter];
 		if ( pThread )
 			pThread->StartThread();
 	}
@@ -113,14 +113,14 @@ const UINT LIB_MULTITHREAD::StartMultiThread()
 	return TRUE;
 }
 
-const BOOL LIB_MULTITHREAD::StopMultiThread()
+const BOOL MultiThread::StopMultiThread()
 {
-	m_bRun		= FALSE;
-	int nSize	= (int)m_vecThread.size();
+	_isRun		= FALSE;
+	int nSize	= (int)_threadVec.size();
 
 	for ( int iter = 0; iter < nSize; iter++ )
 	{
-		LIB_SINGLETHREAD* pThread = m_vecThread[iter];
+		SingleThread* pThread = _threadVec[iter];
 		if ( pThread )
 		{
 			if ( pThread->StopThread() != TRUE )

@@ -6,10 +6,11 @@ namespace CommonLib
 {
 	const wchar_t NAME_TESTSERVER[MAX_STRING]	= _T("TestServer");
 
-	class LIB_SERVERINFO
+	class ServerInfo
 	{
 	public :
-		LIB_SERVERINFO()
+
+		ServerInfo()
 		{
 			dwServerID		= 0;
 			dwWorldID		= 0;
@@ -20,8 +21,11 @@ namespace CommonLib
             ZeroMemory(&szServerIP, MIN_STRING);
 			ZeroMemory(&szServerName, MIN_STRING);
 		}
-		~LIB_SERVERINFO()	{}
+
+		~ServerInfo()	{}
+
 	public :
+
 		DWORD	dwServerID;
 		DWORD	dwWorldID;
 		DWORD	dwSession;
@@ -30,5 +34,6 @@ namespace CommonLib
 		DWORD	dwServerType;
 		wchar_t szServerIP[MIN_STRING];
 		wchar_t szServerName[MIN_STRING];
+
 	};
 }
