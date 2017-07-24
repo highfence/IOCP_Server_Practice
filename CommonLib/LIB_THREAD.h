@@ -22,20 +22,29 @@ namespace COMMONLIB
 	class LIB_THREAD
 	{
 	public :	// Constructor & Destructor
+
 		LIB_THREAD();
 		~LIB_THREAD();
+
 	protected :	// Member protected variable
+
 		volatile BOOL	m_bRun;
+
 	private :	// Member private variable
+
 		HANDLE			m_hThreadHandle;
 		unsigned		m_nThreadID;
+
 	public :	// Member public function
+
 		virtual const UINT Run() = 0;
         const	BOOL		StartThread();
 		const	BOOL		StopThread();
 		const	BOOL		IsRun()			{	return m_bRun;	}
 		const	unsigned	GetThreadID()	{	return m_nThreadID;	}
+
 	private :	// Member private function
+
 		static	UINT WINAPI	ThreadFunc(LPVOID lpParam);
 	};
 
@@ -44,14 +53,18 @@ namespace COMMONLIB
 	class LIB_SINGLETHREAD	: public LIB_THREAD
 	{
 	private :
+
 		LPVOID				m_lpParam;
 		LPTHREADCALLBACK	m_lpFunc;
+
 	public :
+
 		const	VOID	Initialize(const LPVOID lpParam, const LPTHREADCALLBACK lpFunc)
 		{
 			m_lpParam	= lpParam;
 			m_lpFunc	= lpFunc;
 		}
+
 		const	UINT	Run()				{	return (*m_lpFunc)(m_lpParam);	}
 	};
 

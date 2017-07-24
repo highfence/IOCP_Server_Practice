@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
-    <ClInclude Include="LIB_LOCK.h" />
+    <ClInclude Include="Lock.h" />
     <ClInclude Include="LIB_LOGSYSTEM.h" />
     <ClInclude Include="LIB_PROFILE.h" />
     <ClInclude Include="LIB_SERVERSYSTEM.h" />

@@ -4,7 +4,7 @@
 
 #include "Common.h"
 #include "LIB_SESSIONDATA.h"
-#include "LIB_LOCK.h"
+#include "Lock.h"
 
 namespace COMMONLIB
 {
@@ -15,7 +15,7 @@ namespace COMMONLIB
 		LIB_SESSIONPOOL();
 		~LIB_SESSIONPOOL();
 	private :
-		LIB_CRITICALLOCK	m_Lock;
+		CriticalLock	m_Lock;
 		LIB_SESSIONDATA*	m_SessionBuffer[SESSION_NUM];
 		PLAYERMAP		m_mapPlayer;
 	public :

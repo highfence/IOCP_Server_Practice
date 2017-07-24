@@ -1,8 +1,7 @@
-
 #pragma once
 
 #include "Common.h"
-#include "LIB_LOCK.h"
+#include "Lock.h"
 
 namespace COMMONLIB
 {
@@ -19,28 +18,36 @@ namespace COMMONLIB
 	 *	Class describe	: 파일에 로그를 남긴다.
 	*/
 
-	class LIB_LOGSYSTEM
+	class LogSystem
 	{
 	public :
-		LIB_LOGSYSTEM();
-		~LIB_LOGSYSTEM();
-	private :
-		LIB_CRITICALLOCK	m_Lock;
-		FILE*			m_pFile;
-		HANDLE			m_hFile;
-		BYTE			m_bLogSystem;
-		TCHAR			m_szEventLogName[MAX_STRING];
-	private :
-		const BOOL	InitialLogFile(const LPCWSTR szFileName);
-		const BOOL	InitialLogHandle(const LPCTSTR szFileName);
-		const BOOL	ReleaseLogFile();
-		const BOOL	ReleaseLogHandle();
-		const BOOL	WriteLogFile(const LPCWSTR szWrite);
-		const BOOL	WriteLogHandle(const LPCWSTR szWrite);
-		const BOOL	WriteLog(const LPCTSTR szWrite);
+
+		LogSystem();
+		~LogSystem();
+
 	public :
+
 		const BOOL	InitialLogWrite(const BYTE bLogSystem, const LPCTSTR szFileName, const LPCTSTR szEventLogName);
 		const BOOL	ReleaseLogWrite();
 		const VOID	EventLog(int nLoop, LPCWSTR pFormat, ...);
+
+	private :
+
+		CriticalLock	_Lock;
+		FILE*			_file;
+		HANDLE			_fileHandle;
+		BYTE			_logSystem;
+		TCHAR			_eventLogName[MAX_STRING];
+
+	private :
+
+		const BOOL	initialLogFile(const LPCWSTR szFileName);
+		const BOOL	initialLogHandle(const LPCTSTR szFileName);
+		const BOOL	releaseLogFile();
+		const BOOL	releaseLogHandle();
+		const BOOL	writeLogFile(const LPCWSTR szWrite);
+		const BOOL	writeLogHandle(const LPCWSTR szWrite);
+		const BOOL	writeLog(const LPCTSTR szWrite);
+
 	};
 }

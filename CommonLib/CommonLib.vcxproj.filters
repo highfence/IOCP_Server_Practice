@@ -21,9 +21,6 @@
     <ClInclude Include="LIB_LOGSYSTEM.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LIB_LOCK.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="LIB_PROFILE.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -43,6 +40,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Protocol.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Lock.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

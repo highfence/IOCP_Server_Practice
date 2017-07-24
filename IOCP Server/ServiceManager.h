@@ -9,7 +9,7 @@
 #include "../CommonLib/LIB_THREAD.h"
 #include "../CommonLib/LIB_LOGSYSTEM.h"
 #include "../CommonLib/LIB_SERVERSYSTEM.h"
-#include "../CommonLib/LIB_LOCK.h"
+#include "../CommonLib/Lock.h"
 #include "../NetworkLib/LIB_IOCPModule.h"
 
 using namespace COMMONLIB;
@@ -42,7 +42,7 @@ private :	// Interface of Release
 
 public :	// Log System
 
-	LIB_LOGSYSTEM	m_Log;
+	LogSystem	m_Log;
 
 private :	// Member Variables of ServiceMain
 
@@ -53,7 +53,7 @@ private :	// Member Variables of ServiceMain
 	LIB_IOCPModule		m_IOCP;
 	LIB_SERVERINFO		m_ServerInfo;
 	LIB_SESSIONPOOL		m_SessionPool;
-	LIB_CRITICALLOCK	m_Lock;
+	CriticalLock	m_Lock;
 	LIB_SESSIONDATA*	m_SendCtx;
 	HANDLE				m_hStopEvent;
 	HANDLE				m_hSendEvent;
