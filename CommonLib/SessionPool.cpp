@@ -1,4 +1,4 @@
-
+#include <algorithm>
 #include "SessionPool.h"
 
 namespace CommonLib
@@ -31,13 +31,16 @@ namespace CommonLib
 
 		this->_lock.Lock();
 		{
-			for (int iter = 0; iter < SESSION_NUM; iter++)
+			// ERROR :: iter가 명확하지 않아 SessionData의 포인터로 받음. 확인 필요.
+			for (SessionData* iter = 0; reinterpret_cast<int>(iter) < SESSION_NUM; iter++)
 			{
+				int idx = reinterpret_cast<int>(iter);
+
 				// empty session 이면
-				if (_sessionBuffer[iter]->GetReference() == FALSE)	
+				if (_sessionBuffer[idx]->GetReference() == FALSE)	
 				{
-					_sessionBuffer[iter]->SetReference();	// session 사용중으로 바꾼다.
-					pPlayer = _sessionBuffer[iter];
+					_sessionBuffer[idx]->SetReference();	// session 사용중으로 바꾼다.
+					pPlayer = _sessionBuffer[idx];
 					break;
 				}
 			}
@@ -47,6 +50,7 @@ namespace CommonLib
 		return pPlayer;
 	}
 
+	// TODO :: wSession은 어떤 기준이지?
 	const SessionData* SessionPool::FindSession(WORD wSession)
 	{
 		SessionData* pFindSession = nullptr;
@@ -60,13 +64,14 @@ namespace CommonLib
 		return pFindSession;
 	}
 
+	// TODO :: szName은 어떤 기준으로 찾은거지?
 	const SessionData* SessionPool::FindSession(LPCTSTR szName)
 	{
 		SessionData* pFindSession = nullptr;
 
 		this->_lock.Lock();
 		{
-
+			
 		}
 		this->_lock.UnLock();
 
@@ -79,7 +84,13 @@ namespace CommonLib
 
 		this->_lock.Lock();
 		{
+			// SessionId가 일치하는 player가 있다면 반환한다.
+			auto player = std::find(_playerVec.begin(), _playerVec.end(), [&](SessionData* data) { return data->GetSessionID() == wID; });
 
+			if (player != _playerVec.end())
+			{
+				pFindSession = *player;
+			}
 		}
 		this->_lock.UnLock();
 
