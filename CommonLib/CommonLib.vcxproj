@@ -36,7 +36,7 @@
     <ClCompile Include="ServiceController.cpp" />
     <ClCompile Include="SessionData.cpp" />
     <ClCompile Include="SessionPool.cpp" />
-    <ClCompile Include="LIB_THREAD.cpp" />
+    <ClCompile Include="Thread.cpp" />
     <ClCompile Include="Packet.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

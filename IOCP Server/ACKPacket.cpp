@@ -4,7 +4,7 @@
 
 using namespace NetworkLib;
 
-const BOOL ServiceManager::RecvCS_AUTH_LOGIN_ACK(SessionData* pSession)
+const BOOL ServiceManager::recvCS_AUTH_LOGIN_ACK(SessionData* pSession)
 {
 	ZeroMemory(pSession->m_SocketCtx.sendContext, MAX_BUFFER);
 
@@ -17,12 +17,12 @@ const BOOL ServiceManager::RecvCS_AUTH_LOGIN_ACK(SessionData* pSession)
 
 	memcpy(&pSession->m_SocketCtx.sendContext->Buffer, szTime, wcslen(szTime));
 
-	m_Lock.Lock();
+	_lock.Lock();
 	{
-		m_SendCtx = pSession;
-		SetEvent(m_hSendEvent);
+		_sendCtx = pSession;
+		SetEvent(_sendEvent);
 	}
-	m_Lock.UnLock();
+	_lock.UnLock();
 
 	return 1;
 }

@@ -93,7 +93,7 @@ const VOID MultiThread::Initialize(const int nSize, const LPVOID lpParam, const 
 		if ( pThread )
 		{
 			pThread->Initialize(lpParam, lpFunc);
-			_threadVec.push_back(SINGLETHREAD::value_type(pThread));
+			_threadVec.push_back(SingleThreadVector::value_type(pThread));
 		}
 	}
 }

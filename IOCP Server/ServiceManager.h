@@ -1,8 +1,4 @@
-
 #pragma once
-
-#ifndef __SERVICEMAIN_H__
-#define __SERVICEMAIN_H__
 
 #include "../CommonLib/Common.h"
 #include "../CommonLib/SessionPool.h"
@@ -17,64 +13,64 @@ using namespace NetworkLib;
 
 class ServiceManager
 {
-public :	// Constructor & Destructor
+public :	
 
+	// Constructor & Destructor
 	ServiceManager();
 	~ServiceManager();
 
-public :	// Server On and Off
-
+	// Server On and Off
 	const BOOL	StartServer(LPTSTR* argv);
 	const BOOL	StopServer();
 
-private :	// Interface of Initialization
+public :	
 
-	const BOOL	InitialAllData();
-	const BOOL	InitialProfile();
-	const BOOL	InitialNetwork();
-	const BOOL	InitialThread();
-	const BOOL	InitialLog();
+	// Log System
+	LogSystem	_log;
 
-private :	// Interface of Release
+private :	
 
-	const BOOL	ReleaseAllData();
-	const BOOL	ReleaseLog();
+	// Interface of Initialization
+	const BOOL	initialAllData();
+	const BOOL	initialProfile();
+	const BOOL	initialNetwork();
+	const BOOL	initialThread();
+	const BOOL	initialLog();
 
-public :	// Log System
+	// Interface of Release
+	const BOOL	releaseAllData();
+	const BOOL	releaseLog();
 
-	LogSystem	m_Log;
-
-private :	// Member Variables of ServiceMain
-
-	MultiThread		m_WorkerThread;
-	SingleThread	m_AcceptThread;
-	SingleThread	m_ControlThread;
-	SingleThread	m_SendThread;
-	IOCPModule		m_IOCP;
-	ServerInfo		m_ServerInfo;
-	SessionPool		m_SessionPool;
-	CriticalLock	m_Lock;
-	SessionData*	m_SendCtx;
-	HANDLE				m_hStopEvent;
-	HANDLE				m_hSendEvent;
-
-private :	// Function of Thread
-
+	// Function of Thread
 	static const UINT _AcceptThread(LPVOID lpParam);
 	static const UINT _ControlThread(LPVOID lpParam);
 	static const UINT _WorkerThread(LPVOID lpParam);
 	static const UINT _SendThread(LPVOID lpParam);
-	const BOOL	AcceptThread();
-	const BOOL	ControlThread();
-	const BOOL	WorkerThread();
-	const BOOL	SendThread();
+	const BOOL	acceptThread();
+	const BOOL	controlThread();
+	const BOOL	workerThread();
+	const BOOL	sendThread();
 
-private :	// REQ PACKET
-	const BOOL	PacketProcess(SessionData* pSession);
-	const BOOL	RecvCS_AUTH_LOGIN_REQ(SessionData* pSession);
-private :	// ACK PACKET
-	const BOOL	RecvCS_AUTH_LOGIN_ACK(SessionData* pSession);
-	
+	// REQ PACKET
+	const BOOL	packetProcess(SessionData* pSession);
+	const BOOL	recvCS_AUTH_LOGIN_REQ(SessionData* pSession);
+
+	// ACK PACKET
+	const BOOL	recvCS_AUTH_LOGIN_ACK(SessionData* pSession);
+
+private :	
+
+	// Member Variables of ServiceMain
+	MultiThread		_workerThread;
+	SingleThread	_acceptThread;
+	SingleThread	_controlThread;
+	SingleThread	_sendThread;
+	IOCPModule		_iocp;
+	ServerInfo		_serverInfo;
+	SessionPool		_sessionPool;
+	CriticalLock	_lock;
+	SessionData*	_sendCtx;
+	HANDLE			_stopEvent;
+	HANDLE			_sendEvent;
+
 };
-
-#endif	// __SERVICEMAIN_H__

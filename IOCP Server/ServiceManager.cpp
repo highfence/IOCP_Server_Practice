@@ -9,8 +9,8 @@
 
 ServiceManager::ServiceManager()
 {
-	m_hSendEvent = INVALID_HANDLE_VALUE;
-	m_hStopEvent = INVALID_HANDLE_VALUE;
+	_sendEvent = INVALID_HANDLE_VALUE;
+	_stopEvent = INVALID_HANDLE_VALUE;
 }
 
 ServiceManager::~ServiceManager()
@@ -18,57 +18,57 @@ ServiceManager::~ServiceManager()
 	if ( StopServer() != TRUE )
 		assert("ERROR : [return FALSE] ServiceMain::~ServiceMain");
 
-	SAFE_CLOSE_HANDLE(m_hSendEvent);
-	SAFE_CLOSE_HANDLE(m_hStopEvent);
+	SAFE_CLOSE_HANDLE(_sendEvent);
+	SAFE_CLOSE_HANDLE(_stopEvent);
 }
 
-const BOOL ServiceManager::InitialAllData()
+const BOOL ServiceManager::initialAllData()
 {
-	m_Log.EventLog(2, L"InitialAllData", L"Start...");
+	_log.EventLog(2, L"InitialAllData", L"Start...");
 
-	if (this->InitialProfile() != TRUE) {
-		m_Log.EventLog(2, L"InitialAllData", L"Initialize Fail : InitialProfile");
+	if (this->initialProfile() != TRUE) {
+		_log.EventLog(2, L"InitialAllData", L"Initialize Fail : InitialProfile");
 		return FALSE;
 	}
 
-	if ( this->InitialLog() != TRUE )
+	if ( this->initialLog() != TRUE )
 	{
-		m_Log.EventLog(2, L"InitialAllData", L"Initialize Fail : Log System");
+		_log.EventLog(2, L"InitialAllData", L"Initialize Fail : Log System");
 		return FALSE;
 	}
 
-	m_Log.EventLog(2, L"InitialAllData", L"Initialize OK : Log System");
+	_log.EventLog(2, L"InitialAllData", L"Initialize OK : Log System");
 
-	if ( this->InitialNetwork() != TRUE )
+	if ( this->initialNetwork() != TRUE )
 	{
-		m_Log.EventLog(2, L"InitialAllData", L"Initialize Fail : Network");
+		_log.EventLog(2, L"InitialAllData", L"Initialize Fail : Network");
 		return FALSE;
 	}
 
-	m_Log.EventLog(2, L"InitialAllData", L"Initialize OK : Network");
+	_log.EventLog(2, L"InitialAllData", L"Initialize OK : Network");
 
-	if ( this->InitialThread() != TRUE )
+	if ( this->initialThread() != TRUE )
 	{
-		m_Log.EventLog(2, L"InitialAllData", L"Initialize Fail : Thread");
+		_log.EventLog(2, L"InitialAllData", L"Initialize Fail : Thread");
 		return FALSE;
 	}
 
-	m_Log.EventLog(2, L"InitialAllData", L"Initialize OK : Thread");
+	_log.EventLog(2, L"InitialAllData", L"Initialize OK : Thread");
 
 	return TRUE;
 }
 
-const BOOL ServiceManager::ReleaseAllData()
+const BOOL ServiceManager::releaseAllData()
 {
-	m_Log.EventLog(1, L"Server Program Release");
+	_log.EventLog(1, L"Server Program Release");
 
-	if ( this->ReleaseLog() != TRUE )
+	if ( this->releaseLog() != TRUE )
 		return FALSE;
 
 	return TRUE;
 }
 
-const BOOL ServiceManager::InitialProfile()
+const BOOL ServiceManager::initialProfile()
 {
 	WCHAR	szBuffer[MAX_STRING]	= _T("");
 	WCHAR	szDrive[MAX_STRING]		= _T("");
@@ -92,72 +92,72 @@ const BOOL ServiceManager::InitialProfile()
 	m_ServerInfo.dwUDPPort		= Profile.GetDWORDFromINI(L"SERVER", L"UDP_PORT");
 	*/
 	
-	m_ServerInfo.dwWorldID = 1;
-	m_ServerInfo.dwServerID = 10;
-	m_ServerInfo.dwServerType = 100;
-	m_ServerInfo.dwTCPPort = 14400;
-	m_ServerInfo.dwUDPPort = 0;
+	_serverInfo.dwWorldID = 1;
+	_serverInfo.dwServerID = 10;
+	_serverInfo.dwServerType = 100;
+	_serverInfo.dwTCPPort = 14400;
+	_serverInfo.dwUDPPort = 0;
 
 	/*
 	Profile.GetStringFromINI(L"SERVER", L"SERVER_NAME", m_ServerInfo.szServerName);
 	Profile.GetStringFromINI(L"SERVER", L"SERVER_IP", m_ServerInfo.szServerIP);
 	*/
 
-	wcscpy(m_ServerInfo.szServerName, L"GameServer");
-	wcscpy(m_ServerInfo.szServerIP, L"127.0.0.1");
+	wcscpy(_serverInfo.szServerName, L"GameServer");
+	wcscpy(_serverInfo.szServerIP, L"127.0.0.1");
 
-	if ( m_ServerInfo.dwWorldID == 0 )
+	if ( _serverInfo.dwWorldID == 0 )
 		return FALSE;
 
 	return TRUE;
 }
 
-const BOOL ServiceManager::InitialNetwork()
+const BOOL ServiceManager::initialNetwork()
 {
 	if ( StartNetwork() != TRUE )
 		return FALSE;
 
-	if ( m_IOCP.StartIOCP() != TRUE )
+	if ( _iocp.StartIOCP() != TRUE )
 		return FALSE;
 
 	return TRUE;
 }
 
-const BOOL ServiceManager::InitialThread()
+const BOOL ServiceManager::initialThread()
 {
-	m_AcceptThread.Initialize(this, _AcceptThread);
-	m_AcceptThread.StartThread();
+	_acceptThread.Initialize(this, _AcceptThread);
+	_acceptThread.StartThread();
 
-	m_ControlThread.Initialize(this, _ControlThread);
-	m_ControlThread.StartThread();
+	_controlThread.Initialize(this, _ControlThread);
+	_controlThread.StartThread();
 
-	m_WorkerThread.Initialize(VALUE_THREAD, this, _WorkerThread);
-	m_WorkerThread.StartMultiThread();
+	_workerThread.Initialize(VALUE_THREAD, this, _WorkerThread);
+	_workerThread.StartMultiThread();
 
-	m_SendThread.Initialize(this, _SendThread);
-	m_SendThread.StartThread();
+	_sendThread.Initialize(this, _SendThread);
+	_sendThread.StartThread();
 
 	return TRUE;
 }
 
-const BOOL ServiceManager::InitialLog()
+const BOOL ServiceManager::initialLog()
 {
 	WCHAR	szFileName[MAX_STRING] = _T("");
 
 	SYSTEMTIME st;
 	::GetLocalTime(&st);
 
-	wsprintf(szFileName, L"[%s] %0.2d-%0.2d-%0.2d.txt", m_ServerInfo.szServerName, st.wYear, st.wMonth, st.wDay);
+	wsprintf(szFileName, L"[%s] %0.2d-%0.2d-%0.2d.txt", _serverInfo.szServerName, st.wYear, st.wMonth, st.wDay);
 
-	if ( m_Log.InitialLogWrite(LOGSYSTEM_HANDLE, szFileName, NAME_TESTSERVER) != TRUE )
+	if ( _log.InitialLogWrite(LOGSYSTEM_HANDLE, szFileName, NAME_TESTSERVER) != TRUE )
 		return FALSE;
 
 	return TRUE;
 }
 
-const BOOL ServiceManager::ReleaseLog()
+const BOOL ServiceManager::releaseLog()
 {
-	if ( m_Log.ReleaseLogWrite() != TRUE )
+	if ( _log.ReleaseLogWrite() != TRUE )
 		return FALSE;
 
 	return TRUE;
@@ -165,21 +165,21 @@ const BOOL ServiceManager::ReleaseLog()
 
 const BOOL ServiceManager::StartServer(LPTSTR* argv)
 {
-	m_Log.EventLog(2, L"StartServer", L"Start...");
+	_log.EventLog(2, L"StartServer", L"Start...");
 
-	if (this->InitialAllData() != TRUE) {
+	if (this->initialAllData() != TRUE) {
 		return FALSE;
 	}
 
-	m_Log.EventLog(2, L"StartServer", L"Initialize : Success");
+	_log.EventLog(2, L"StartServer", L"Initialize : Success");
 
 
-	m_hStopEvent = CreateEvent(NULL, TRUE, FALSE, L"Server Stop Event");
-	m_hSendEvent = CreateEvent(NULL, TRUE, FALSE, L"Send Data Event");
+	_stopEvent = CreateEvent(NULL, TRUE, FALSE, L"Server Stop Event");
+	_sendEvent = CreateEvent(NULL, TRUE, FALSE, L"Send Data Event");
 
-	if ( WaitForSingleObject(m_hStopEvent, INFINITE) != WAIT_TIMEOUT )
+	if ( WaitForSingleObject(_stopEvent, INFINITE) != WAIT_TIMEOUT )
 	{
-		SAFE_CLOSE_HANDLE(m_hStopEvent);
+		SAFE_CLOSE_HANDLE(_stopEvent);
 	}
 	else
 		return FALSE;
@@ -189,42 +189,42 @@ const BOOL ServiceManager::StartServer(LPTSTR* argv)
 
 const BOOL ServiceManager::StopServer()
 {
-	if ( this->m_AcceptThread.StopThread() != TRUE )
+	if ( this->_acceptThread.StopThread() != TRUE )
 	{
-		m_Log.EventLog(2, L"StopServer", L"Release Fail : AcceptThread");
+		_log.EventLog(2, L"StopServer", L"Release Fail : AcceptThread");
 		return FALSE;
 	}
 
-	m_Log.EventLog(2, L"StopServer", L"Release OK : AcceptThread");
+	_log.EventLog(2, L"StopServer", L"Release OK : AcceptThread");
 
-	if ( this->m_ControlThread.StopThread() != TRUE )
+	if ( this->_controlThread.StopThread() != TRUE )
 	{
-		m_Log.EventLog(2, L"StopServer", L"Release Fail : ControlThread");
+		_log.EventLog(2, L"StopServer", L"Release Fail : ControlThread");
 		return FALSE;
 	}
 
-	m_Log.EventLog(2, L"StopServer", L"Release OK : ControlThread");
+	_log.EventLog(2, L"StopServer", L"Release OK : ControlThread");
 
-	if ( this->m_WorkerThread.StopMultiThread() != TRUE )
+	if ( this->_workerThread.StopMultiThread() != TRUE )
 	{
-		m_Log.EventLog(2, L"StopServer", L"Release Fail : WorkerThread");
+		_log.EventLog(2, L"StopServer", L"Release Fail : WorkerThread");
 		return FALSE;
 	}
 
-	m_Log.EventLog(2, L"StopServer", L"Release OK : WorkerThread");
+	_log.EventLog(2, L"StopServer", L"Release OK : WorkerThread");
 
 	if ( EndNetwork() != TRUE )
 	{
-		m_Log.EventLog(2, L"StopServer", L"Release Fail : END_NETWORK");
+		_log.EventLog(2, L"StopServer", L"Release Fail : END_NETWORK");
 		return FALSE;
 	}
 
-	m_Log.EventLog(2, L"StopServer", L"Release OK : END_NETWORK");
+	_log.EventLog(2, L"StopServer", L"Release OK : END_NETWORK");
 
-	if ( this->ReleaseAllData() != TRUE )
+	if ( this->releaseAllData() != TRUE )
 		return FALSE;
 
-	SetEvent(m_hStopEvent);
+	SetEvent(_stopEvent);
 
 	return TRUE;
 }
@@ -235,7 +235,7 @@ const UINT ServiceManager::_AcceptThread(LPVOID lpParam)
 	if ( !pThis )
 		return FALSE;
 
-	pThis->AcceptThread();
+	pThis->acceptThread();
 
 	return TRUE;
 }
@@ -246,7 +246,7 @@ const UINT ServiceManager::_ControlThread(LPVOID lpParam)
 	if ( !pThis )
 		return FALSE;
 
-	pThis->ControlThread();
+	pThis->controlThread();
 
 	return TRUE;
 }
@@ -257,7 +257,7 @@ const UINT ServiceManager::_WorkerThread(LPVOID lpParam)
 	if ( !pThis )
 		return FALSE;
 
-	pThis->WorkerThread();
+	pThis->workerThread();
 
 	return TRUE;
 }
@@ -268,12 +268,12 @@ const UINT ServiceManager::_SendThread(LPVOID lpParam)
 	if ( !pThis )
 		return FALSE;
 
-	pThis->SendThread();
+	pThis->sendThread();
 
 	return TRUE;
 }
 
-const BOOL ServiceManager::AcceptThread()
+const BOOL ServiceManager::acceptThread()
 {
 	SOCKET		hServSock = INVALID_SOCKET;
 	SOCKET		hClntSock = INVALID_SOCKET;
@@ -289,7 +289,7 @@ const BOOL ServiceManager::AcceptThread()
 		return FALSE;
 
 	servAddr.sin_family			= AF_INET;
-	servAddr.sin_port			= htons((u_short)m_ServerInfo.dwTCPPort);
+	servAddr.sin_port			= htons((u_short)_serverInfo.dwTCPPort);
 	servAddr.sin_addr.s_addr	= htonl(INADDR_ANY);
 
 	if ( bind(hServSock, (SOCKADDR*)&servAddr, sizeof(servAddr)) == SOCKET_ERROR )
@@ -300,7 +300,7 @@ const BOOL ServiceManager::AcceptThread()
 
 	int nSizeClntAddr = sizeof(clntAddr);
 
-	while ( m_AcceptThread.IsRun() )
+	while ( _acceptThread.IsRun() )
 	{
 		DWORD dwRecvByte = 0;
 		DWORD dwFlags = 0;
@@ -311,7 +311,7 @@ const BOOL ServiceManager::AcceptThread()
 		{
 			if ( WSAEINTR == WSAGetLastError() )
 			{
-				m_Log.EventLog(2, L"AcceptThread", GetStringErrCode(WSAEINTR));
+				_log.EventLog(2, L"AcceptThread", GetStringErrCode(WSAEINTR));
 				return 0;
 			}
 		}
@@ -327,13 +327,13 @@ const BOOL ServiceManager::AcceptThread()
 		if ( SOCKET_ERROR == setsockopt(hClntSock, SOL_SOCKET, SO_SNDBUF, (const char*)&nZero, sizeof(nZero)) )
 			continue;
 
-		SessionData* pSession = m_SessionPool.CreateSession();
+		SessionData* pSession = _sessionPool.CreateSession();
 		pSession->m_SocketCtx.clntSocket = hClntSock;
 		pSession->SetClientAddr(&clntAddr);
 
-		m_SessionPool.InsertSession(pSession);
+		_sessionPool.InsertSession(pSession);
 
-		if ( m_IOCP.RegisterCilent(hClntSock, pSession) != TRUE )
+		if ( _iocp.RegisterCilent(hClntSock, pSession) != TRUE )
 		{
 //			m_Log.EventLog();
 			continue;
@@ -354,7 +354,7 @@ const BOOL ServiceManager::AcceptThread()
 	return TRUE;
 }
 
-const BOOL ServiceManager::ControlThread()
+const BOOL ServiceManager::controlThread()
 {
 	WCHAR	szTitle[MAX_STRING] = _T("");
 	WCHAR	szWatch[MAX_STRING]	= _T("");
@@ -362,7 +362,7 @@ const BOOL ServiceManager::ControlThread()
 
 	HANDLE hTimeEvent = WSACreateEvent();
 
-	while ( m_ControlThread.IsRun() )
+	while ( _controlThread.IsRun() )
 	{
 		if ( WaitForSingleObject(hTimeEvent, 999) == WAIT_TIMEOUT )	// 999 ms 를 1초로 가정하자. 왜냐하면 if 문 이하 수행처리 시간을 고려했다.
 		{
@@ -377,7 +377,7 @@ const BOOL ServiceManager::ControlThread()
 				dwMinute = 0;
 			}
 
-			wsprintf(szTitle, L"Time(%d/%d/%d) | Player(%d)", dwHour, dwMinute, dwSecond++, m_SessionPool.GetSessionSize());
+			wsprintf(szTitle, L"Time(%d/%d/%d) | Player(%d)", dwHour, dwMinute, dwSecond++, _sessionPool.GetSessionSize());
 			SetConsoleTitle(szTitle);
 		}
 	}
@@ -390,21 +390,21 @@ const BOOL ServiceManager::ControlThread()
 /*
  *	멀티 스레드를 사용한다. 따라서 멤버 변수에 접근하면 꼭 Lock 을 걸어둔다
 */
-const BOOL ServiceManager::WorkerThread()
+const BOOL ServiceManager::workerThread()
 {
 	DWORD				dwSizeInOutData = 0;
 	DWORD				dwResult = 0;
 	SessionData*	pSession = NULL;
 	PPerIoContext		pPerIoCtx = NULL;
 
-	while ( m_WorkerThread.IsRun() )
+	while ( _workerThread.IsRun() )
 	{
 		dwSizeInOutData = 0;
 		dwResult = 0;
 		pSession = NULL;
 		pPerIoCtx = NULL;
 
-		if ( FALSE == GetQueuedCompletionStatus(m_IOCP.GetCompletionPort(), 
+		if ( FALSE == GetQueuedCompletionStatus(_iocp.GetCompletionPort(), 
 												&dwSizeInOutData, 
 												(PULONG_PTR)&pSession, 
 												(LPOVERLAPPED*)&pPerIoCtx, 
@@ -425,15 +425,15 @@ const BOOL ServiceManager::WorkerThread()
 				wsprintf(szTemp, L"클라이언트 close 횟수 : %d", ++snCount);
 				// 위에 3줄 코딩은 삭제하세요. 테스트로 남긴거예요.
 
-				m_Log.EventLog(1, szTemp);
-				m_SessionPool.DeleteSession(pSession);
+				_log.EventLog(1, szTemp);
+				_sessionPool.DeleteSession(pSession);
 				continue;
 			}
 			
 			if ( pPerIoCtx == pSession->m_SocketCtx.recvContext )
 			{
 				// 보낸 패킷의 사이즈만큼 받아서 처리할 것
-				PacketProcess(pSession);
+				packetProcess(pSession);
 				
 				DWORD dwFlags = 0;	// out parameter, and I/O 처리가 끝나면 꼭 해당 소켓에 recv 를 걸어둔다.
 				WSARecv(pSession->m_SocketCtx.clntSocket, &(pSession->m_SocketCtx.recvContext->wsaBuf), 1, NULL, &dwFlags, &(pSession->m_SocketCtx.recvContext->overlapped), NULL);
@@ -450,13 +450,13 @@ const BOOL ServiceManager::WorkerThread()
 			}
 			else if ( ERROR_NETNAME_DELETED == dwResult ) 
 			{
-				m_Log.EventLog(2, L"WorkerThread", L"ERROR CODE : ERROR_NETNAME_DELETED");
-				m_SessionPool.DeleteSession(pSession);
+				_log.EventLog(2, L"WorkerThread", L"ERROR CODE : ERROR_NETNAME_DELETED");
+				_sessionPool.DeleteSession(pSession);
 			}
 			else 
 			{
-				m_Log.EventLog(2, L"GetQueuedCompletionStatus unknown Error [%d]", dwResult);
-				m_SessionPool.DeleteSession(pSession);
+				_log.EventLog(2, L"GetQueuedCompletionStatus unknown Error [%d]", dwResult);
+				_sessionPool.DeleteSession(pSession);
 			}
 
 			continue;
@@ -466,18 +466,18 @@ const BOOL ServiceManager::WorkerThread()
 	return TRUE;
 }
 
-const BOOL ServiceManager::SendThread()
+const BOOL ServiceManager::sendThread()
 {
 	DWORD	dwSendBytes = 0;
 	DWORD	dwFlags = 0;
 
-	while ( m_SendThread.IsRun() )
+	while ( _sendThread.IsRun() )
 	{
-		DWORD dwRet = WaitForSingleObject(m_hSendEvent, INFINITE);
+		DWORD dwRet = WaitForSingleObject(_sendEvent, INFINITE);
 
-		if ( m_SendCtx != NULL )
+		if ( _sendCtx != NULL )
 		{
-			int nReturn = ::WSASend(m_SendCtx->m_SocketCtx.clntSocket, &m_SendCtx->m_SocketCtx.sendContext->wsaBuf, 1, &dwSendBytes, dwFlags, &m_SendCtx->m_SocketCtx.sendContext->overlapped, NULL);
+			int nReturn = ::WSASend(_sendCtx->m_SocketCtx.clntSocket, &_sendCtx->m_SocketCtx.sendContext->wsaBuf, 1, &dwSendBytes, dwFlags, &_sendCtx->m_SocketCtx.sendContext->overlapped, NULL);
 
 			if ( nReturn == SOCKET_ERROR )
 			{
@@ -487,16 +487,16 @@ const BOOL ServiceManager::SendThread()
 				}
 			}
 
-			m_SendCtx = NULL;
+			_sendCtx = NULL;
 		}
 
-		ResetEvent(m_hSendEvent);
+		ResetEvent(_sendEvent);
 	}
 
 	return TRUE;
 }
 
-const BOOL ServiceManager::PacketProcess(SessionData* pSession)
+const BOOL ServiceManager::packetProcess(SessionData* pSession)
 {
 	BOOL bReturn = TRUE;
 
@@ -505,7 +505,7 @@ const BOOL ServiceManager::PacketProcess(SessionData* pSession)
 
 	switch ( Header.command )
 	{
-	case CS_AUTH_LOGIN_REQ	:	this->RecvCS_AUTH_LOGIN_REQ(pSession);		break;
+	case CS_AUTH_LOGIN_REQ	:	this->recvCS_AUTH_LOGIN_REQ(pSession);		break;
 	default					:	bReturn = FALSE;							break;
 	}
 
