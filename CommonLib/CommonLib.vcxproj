@@ -26,7 +26,7 @@
     <ClInclude Include="LIB_SERVERSYSTEM.h" />
     <ClInclude Include="ServiceController.h" />
     <ClInclude Include="SessionData.h" />
-    <ClInclude Include="LIB_SESSIONPOOL.h" />
+    <ClInclude Include="SessionPool.h" />
     <ClInclude Include="LIB_THREAD.h" />
     <ClInclude Include="Protocol.h" />
   </ItemGroup>
@@ -34,8 +34,8 @@
     <ClCompile Include="LogSystem.cpp" />
     <ClCompile Include="Profile.cpp" />
     <ClCompile Include="ServiceController.cpp" />
-    <ClCompile Include="LIB_SESSIONDATA.cpp" />
-    <ClCompile Include="LIB_SESSIONPOOL.cpp" />
+    <ClCompile Include="SessionData.cpp" />
+    <ClCompile Include="SessionPool.cpp" />
     <ClCompile Include="LIB_THREAD.cpp" />
     <ClCompile Include="Packet.cpp" />
   </ItemGroup>

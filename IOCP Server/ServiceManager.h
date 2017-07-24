@@ -5,7 +5,7 @@
 #define __SERVICEMAIN_H__
 
 #include "../CommonLib/Common.h"
-#include "../CommonLib/LIB_SESSIONPOOL.h"
+#include "../CommonLib/SessionPool.h"
 #include "../CommonLib/LIB_THREAD.h"
 #include "../CommonLib/LogSystem.h"
 #include "../CommonLib/LIB_SERVERSYSTEM.h"
@@ -52,7 +52,7 @@ private :	// Member Variables of ServiceMain
 	LIB_SINGLETHREAD	m_SendThread;
 	LIB_IOCPModule		m_IOCP;
 	LIB_SERVERINFO		m_ServerInfo;
-	LIB_SESSIONPOOL		m_SessionPool;
+	SessionPool		m_SessionPool;
 	CriticalLock	m_Lock;
 	SessionData*	m_SendCtx;
 	HANDLE				m_hStopEvent;
