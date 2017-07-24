@@ -18,9 +18,6 @@
     <ClInclude Include="Common.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="LIB_LOGSYSTEM.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="LIB_PROFILE.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -45,6 +42,9 @@
     <ClInclude Include="Lock.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="LogSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Packet.cpp">
@@ -65,7 +65,7 @@
     <ClCompile Include="LIB_PROFILE.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="LIB_LOGSYSTEM.cpp">
+    <ClCompile Include="LogSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

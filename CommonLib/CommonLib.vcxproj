@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="Lock.h" />
-    <ClInclude Include="LIB_LOGSYSTEM.h" />
+    <ClInclude Include="LogSystem.h" />
     <ClInclude Include="LIB_PROFILE.h" />
     <ClInclude Include="LIB_SERVERSYSTEM.h" />
     <ClInclude Include="LIB_SERVICECTRL.h" />
@@ -31,7 +31,7 @@
     <ClInclude Include="Protocol.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LIB_LOGSYSTEM.cpp" />
+    <ClCompile Include="LogSystem.cpp" />
     <ClCompile Include="LIB_PROFILE.cpp" />
     <ClCompile Include="LIB_SERVICECTRL.cpp" />
     <ClCompile Include="LIB_SESSIONDATA.cpp" />

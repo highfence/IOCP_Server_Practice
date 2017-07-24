@@ -7,7 +7,7 @@
 #include "../CommonLib/Common.h"
 #include "../CommonLib/LIB_SESSIONPOOL.h"
 #include "../CommonLib/LIB_THREAD.h"
-#include "../CommonLib/LIB_LOGSYSTEM.h"
+#include "../CommonLib/LogSystem.h"
 #include "../CommonLib/LIB_SERVERSYSTEM.h"
 #include "../CommonLib/Lock.h"
 #include "../NetworkLib/LIB_IOCPModule.h"
