@@ -8,7 +8,7 @@ const BOOL PreProcessParameter(const int argc, WCHAR* argv[]);
 BOOL WINAPI ConsoleCtrlHandler(const DWORD dwCtrlType);	// 디버그 콘솔 모드시
 ServiceManager theServer;
 
-int _tmain(int argc, WCHAR* argv[])
+int wmain(int argc, WCHAR* argv[])
 {
 	if ( PreProcessParameter(argc, argv) != TRUE )
 		return FALSE;
@@ -23,11 +23,11 @@ const BOOL PreProcessParameter(const int argc, WCHAR* argv[])
 
 	if ( GetModuleFileName(NULL, szServiceDir, MAX_STRING) == 0 )
 	{
-		_tprintf(_T("PreProcessParameter::GetModuleFileName Error\n"));
+		wprintf(_T("PreProcessParameter::GetModuleFileName Error\n"));
 		bIsSuccess = FALSE;
 	}
 
-	_tprintf(_T("Start Console Mode\n"));
+	wprintf(_T("Start Console Mode\n"));
 
 	if ( SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE) != TRUE )
 		return FALSE;
