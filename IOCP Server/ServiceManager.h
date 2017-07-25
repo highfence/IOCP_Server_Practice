@@ -48,9 +48,10 @@ private :
 	const BOOL	controlThread();
 	const BOOL	workerThread();
 	const BOOL	sendThread();
+	const BOOL  logicThread();
 
 	// REQ PACKET
-	const BOOL	packetProcess(SessionData* pSession);
+	const BOOL	packetProcess(const int sessionId);
 	const BOOL	recvCS_AUTH_LOGIN_REQ(SessionData* pSession);
 
 	// ACK PACKET
@@ -63,11 +64,13 @@ private :
 	SingleThread	  _acceptThread;
 	SingleThread	  _controlThread;
 	SingleThread	  _sendThread;
+	SingleThread	  _logicThread;
 	IOCPModule		  _iocp;
 	ServerInfo		  _serverInfo;
 	SessionPool		  _sessionPool;
-	CriticalLock	  _lock;
+	CriticalLock	  _packetLock;
 	std::deque<char*> _sendQueue;
+	std::deque<int>   _packetProcessQueue;
 	HANDLE			  _stopEvent;
 
 	// Threads
@@ -75,4 +78,5 @@ private :
 	static const UINT _ControlThread(LPVOID lpParam);
 	static const UINT _WorkerThread(LPVOID lpParam);
 	static const UINT _SendThread(LPVOID lpParam);
+	static const UINT _LogicThread(LPVOID lpParam);
 };

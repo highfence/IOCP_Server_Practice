@@ -22,6 +22,7 @@ namespace CommonLib
 
 		SessionData*		CreateSession();
 		SessionData*		FindSessionIndex(const int idx);
+		SessionData*		FindSessionId(const int sessionId);
 		const VOID			InsertSession(SessionData* pSession);
 		const WORD			GetSessionSize();
 		const VOID			DeleteSession(SessionData* pSession);

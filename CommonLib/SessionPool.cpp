@@ -77,6 +77,24 @@ namespace CommonLib
 		return _sessionBuffer[idx];
 	}
 
+	SessionData * SessionPool::FindSessionId(const int sessionId)
+	{
+		_lock.Lock();
+		{
+			for (SessionVector::size_type i = 0; i < _playerVec.size(); ++i)
+			{
+				if (_playerVec[i]->GetSessionID() == sessionId)
+				{
+					_lock.UnLock();
+					return _playerVec[i];
+				}
+			}
+		}
+		_lock.UnLock();
+
+		return nullptr;
+	}
+
 	const VOID SessionPool::InsertSession(SessionData* pSession)
 	{
 		if (pSession == nullptr)

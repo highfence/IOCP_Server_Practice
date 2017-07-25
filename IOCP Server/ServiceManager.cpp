@@ -135,6 +135,9 @@ const BOOL ServiceManager::initialThread()
 	_sendThread.Initialize(this, _SendThread);
 	_sendThread.StartThread();
 
+	_logicThread.Initialize(this, _LogicThread);
+	_logicThread.StartThread();
+
 	return TRUE;
 }
 
@@ -280,6 +283,19 @@ const UINT ServiceManager::_SendThread(LPVOID lpParam)
 	return TRUE;
 }
 
+const UINT ServiceManager::_LogicThread(LPVOID lpParam)
+{
+	ServiceManager* pThis = (ServiceManager*)lpParam;
+	if (!pThis)
+	{
+		return FALSE;
+	}
+
+	pThis->logicThread();
+
+	return TRUE;
+}
+
 const BOOL ServiceManager::acceptThread()
 {
 	SOCKET		hServSock = INVALID_SOCKET;
@@ -371,7 +387,8 @@ const BOOL ServiceManager::controlThread()
 
 	while ( _controlThread.IsRun() )
 	{
-		if ( WaitForSingleObject(hTimeEvent, 999) == WAIT_TIMEOUT )	// 999 ms 를 1초로 가정하자. 왜냐하면 if 문 이하 수행처리 시간을 고려했다.
+		// 999 ms 를 1초로 가정하자. 왜냐하면 if 문 이하 수행처리 시간을 고려했다.
+		if ( WaitForSingleObject(hTimeEvent, 999) == WAIT_TIMEOUT )	
 		{
 			if ( dwSecond >= 60 )
 			{
@@ -441,7 +458,12 @@ const BOOL ServiceManager::workerThread()
 			if (pPerIoCtx == pSession->_SocketContext.recvContext)
 			{
 				// 보낸 패킷의 사이즈만큼 받아서 처리할 것
-				packetProcess(pSession);
+				//packetProcess(pSession);
+				_packetLock.Lock();
+				{
+					_packetProcessQueue.push_back(pSession->GetSessionID());
+				}
+				_packetLock.UnLock();
 
 				DWORD dwFlags = 0;	// out parameter, and I/O 처리가 끝나면 꼭 해당 소켓에 recv 를 걸어둔다.
 				WSARecv(pSession->_SocketContext.clntSocket, &(pSession->_SocketContext.recvContext->wsaBuf), 1, NULL, &dwFlags, &(pSession->_SocketContext.recvContext->overlapped), NULL);
@@ -489,15 +511,41 @@ const BOOL ServiceManager::sendThread()
 			
 			session->FlushSend();
 		}
+
+		Sleep(10);
 	}
 	return TRUE;
 }
 
-const BOOL ServiceManager::packetProcess(SessionData* pSession)
+const BOOL ServiceManager::logicThread()
+{
+	while (_logicThread.IsRun())
+	{
+		_packetLock.Lock();
+		while (!_packetProcessQueue.empty())
+		{
+			int sessionId = _packetProcessQueue.front();
+			packetProcess(sessionId);
+			_packetProcessQueue.pop_front();
+		}
+		_packetLock.UnLock();
+
+		Sleep(10);
+	}
+	return TRUE;
+}
+
+const BOOL ServiceManager::packetProcess(const int sessionId)
 {
 	BOOL bReturn = TRUE;
+	auto pSession = _sessionPool.FindSessionId(sessionId);
 
-	header_special	Header;
+	if (pSession == nullptr)
+	{
+		return FALSE;
+	}
+
+	header_special Header;
 	memcpy(&Header, pSession->_SocketContext.recvContext->Buffer, SIZE_HEADER);
 
 	switch (Header.command)
