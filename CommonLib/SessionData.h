@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Common.h"
+#include "CircularQueue.h"
+#include "Lock.h"
 
 namespace CommonLib
 {
@@ -34,6 +36,10 @@ namespace CommonLib
 		const VOID ClearSocketContext();
 		const VOID CreateCryptKey();
 
+		const BOOL PostSend(const char* data, const int dataSize);
+		const BOOL FlushSend();
+		const BOOL CompleteSend();
+
 	public :
 
 		PerSocketContext	_SocketContext;
@@ -44,6 +50,8 @@ namespace CommonLib
 		WORD				_sessionId;
 		BOOL				_isReference;
 		BOOL				_isSending;
+		CircularQueue		_sendQueue;
+		CriticalLock		_sendLock;
 	};
 
 }

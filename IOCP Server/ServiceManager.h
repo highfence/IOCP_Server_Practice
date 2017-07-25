@@ -67,10 +67,8 @@ private :
 	ServerInfo		  _serverInfo;
 	SessionPool		  _sessionPool;
 	CriticalLock	  _lock;
-	SessionData*	  _sendContext;
 	std::deque<char*> _sendQueue;
 	HANDLE			  _stopEvent;
-	HANDLE			  _sendEvent;
 
 	// Threads
 	static const UINT _AcceptThread(LPVOID lpParam);

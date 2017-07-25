@@ -20,10 +20,8 @@ namespace CommonLib
 
 	public :
 
-		SessionData*	CreateSession();
-		const SessionData*	FindSession(WORD wSession);
-		const SessionData*	FindSession(LPCTSTR szName);
-		const SessionData*	FindSessionID(WORD wID);
+		SessionData*		CreateSession();
+		SessionData*		FindSessionIndex(const int idx);
 		const VOID			InsertSession(SessionData* pSession);
 		const WORD			GetSessionSize();
 		const VOID			DeleteSession(SessionData* pSession);

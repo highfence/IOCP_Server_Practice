@@ -1,9 +1,7 @@
-
 #include "SessionData.h"
 
 namespace CommonLib
 {
-
 	SessionData::SessionData(WORD wSessionID)
 	{
 		_sessionId = wSessionID;
@@ -59,6 +57,87 @@ namespace CommonLib
 		DWORD	dwTickCount = GetTickCount();
 		srand(dwTickCount);
 		wCryptKey = rand() & 255;
+	}
+
+	const BOOL SessionData::PostSend(const char * data, const int dataSize)
+	{
+		_sendLock.Lock();
+		{
+			_sendQueue.Push(data, dataSize);
+		}
+		_sendLock.UnLock();
+
+		return true;
+	}
+
+	const BOOL SessionData::FlushSend()
+	{
+		_sendLock.Lock();
+		{
+			if (_SocketContext.clntSocket == INVALID_SOCKET)
+			{
+				_sendLock.UnLock();
+				return false;
+			}
+
+			if (_isSending == TRUE)
+			{
+				_sendLock.UnLock();
+				return false;
+			}
+
+			auto sendData = _sendQueue.GetDataSize();
+
+			if (sendData < 0)
+			{
+				_sendLock.UnLock();
+				return false;
+			}
+
+			_isSending = TRUE;
+			_sendQueue.Pop(_SocketContext.sendContext->Buffer, sendData);
+
+			_SocketContext.sendContext->wsaBuf.buf = _SocketContext.sendContext->Buffer;
+			_SocketContext.sendContext->wsaBuf.len = sendData;
+
+			DWORD sendbytes = 0;
+			DWORD flags = 0;
+
+			int returnValue = WSASend(
+				_SocketContext.clntSocket,
+				&_SocketContext.sendContext->wsaBuf,
+				1,
+				&sendbytes,
+				flags,
+				&_SocketContext.sendContext->overlapped,
+				NULL);
+
+			if (returnValue == SOCKET_ERROR)
+			{
+				if (WSAGetLastError() != ERROR_IO_PENDING)
+				{
+					// 에러 처리.
+				}
+			}
+		}
+		_sendLock.UnLock();
+		return true;
+	}
+
+	const BOOL SessionData::CompleteSend()
+	{
+		_sendLock.Lock();
+		{
+			if (_SocketContext.clntSocket == INVALID_SOCKET)
+			{
+				_sendLock.UnLock();
+				return false;
+			}
+
+			_isSending = false;
+		}
+		_sendLock.UnLock();
+		return true;
 	}
 
 	const VOID SessionData::ClearSocketContext()

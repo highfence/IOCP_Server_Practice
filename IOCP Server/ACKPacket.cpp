@@ -1,4 +1,5 @@
 
+#include <algorithm>
 #include "ServiceManager.h"
 #include "../CommonLib/Protocol.h"
 
@@ -15,14 +16,7 @@ const BOOL ServiceManager::recvCS_AUTH_LOGIN_ACK(SessionData* pSession)
 
 	wsprintf(szTime, L"%d/%d/%ds/%dms", st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 
-	memcpy(&pSession->_SocketContext.sendContext->Buffer, szTime, wcslen(szTime));
-
-	_lock.Lock();
-	{
-		_sendContext = pSession;
-	}
-	_lock.UnLock();
-	SetEvent(_sendEvent);
+	pSession->PostSend((char*)szTime, wcslen(szTime));
 
 	return 1;
 }

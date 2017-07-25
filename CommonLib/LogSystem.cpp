@@ -33,7 +33,7 @@ namespace CommonLib
 			if (wcslen(szEventLogName) <= 1)
 				return bReturn;
 			else
-				wcscpy(_eventLogName, szEventLogName);
+				wcscpy_s(_eventLogName, szEventLogName);
 
 			_logSystem = bLogSystem;
 
@@ -188,15 +188,15 @@ namespace CommonLib
 		va_list pArg;
 		va_start(pArg, pFormat);
 		_vstprintf(szError, pFormat, pArg);
-		wcscat(szDate, szError);
+		wcscat_s(szDate, szError);
 
 		if (nLoop >= 2)
 		{
 			for (int iter = 0; iter < nLoop - 1; iter++)
 			{
 				LPCTSTR lpText = va_arg(pArg, LPCTSTR);
-				wcscat(szDate, L" / ");
-				wcscat(szDate, lpText);
+				wcscat_s(szDate, L" / ");
+				wcscat_s(szDate, lpText);
 			}
 		}
 

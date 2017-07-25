@@ -9,7 +9,6 @@
 
 ServiceManager::ServiceManager()
 {
-	_sendEvent = INVALID_HANDLE_VALUE;
 	_stopEvent = INVALID_HANDLE_VALUE;
 }
 
@@ -18,7 +17,6 @@ ServiceManager::~ServiceManager()
 	if ( StopServer() != TRUE )
 		assert("ERROR : [return FALSE] ServiceMain::~ServiceMain");
 
-	SAFE_CLOSE_HANDLE(_sendEvent);
 	SAFE_CLOSE_HANDLE(_stopEvent);
 }
 
@@ -175,7 +173,6 @@ const BOOL ServiceManager::StartServer(LPTSTR* argv)
 
 
 	_stopEvent = CreateEvent(NULL, TRUE, FALSE, L"Server Stop Event");
-	_sendEvent = CreateEvent(NULL, TRUE, FALSE, L"Send Data Event");
 
 	if ( WaitForSingleObject(_stopEvent, INFINITE) != WAIT_TIMEOUT )
 	{
@@ -404,7 +401,7 @@ const BOOL ServiceManager::workerThread()
 {
 	DWORD				dwSizeInOutData = 0;
 	DWORD				dwResult = 0;
-	SessionData*	pSession = NULL;
+	SessionData*		pSession = NULL;
 	PPerIoContext		pPerIoCtx = NULL;
 
 	while (_workerThread.IsRun())
@@ -414,21 +411,22 @@ const BOOL ServiceManager::workerThread()
 		pSession = NULL;
 		pPerIoCtx = NULL;
 
-		if (FALSE == GetQueuedCompletionStatus(_iocp.GetCompletionPort(),
-			&dwSizeInOutData,
-			(PULONG_PTR)&pSession,
-			(LPOVERLAPPED*)&pPerIoCtx,
-			INFINITE))
-			dwResult = WSAGetLastError();
+		if (FALSE == GetQueuedCompletionStatus(
+				_iocp.GetCompletionPort(),
+				&dwSizeInOutData,
+				(PULONG_PTR)&pSession,
+				(LPOVERLAPPED*)&pPerIoCtx,
+				INFINITE))
+
+		dwResult = WSAGetLastError();
 
 		if (dwResult == 0)
 		{
-			DWORD dwError = GetLastError();
-
 			if (pSession == NULL)
 				continue;
 
-			if (dwSizeInOutData == 0)	// 클라이언트가 접속을 끊었다
+			// 클라이언트가 접속을 끊었다
+			if (dwSizeInOutData == 0)	
 			{
 				static int snCount = 0;
 				WCHAR szTemp[MAX_STRING] = _T("");
@@ -450,7 +448,7 @@ const BOOL ServiceManager::workerThread()
 			}
 			else if (pPerIoCtx == pSession->_SocketContext.sendContext)
 			{
-				// WSASend 가 호출되고나서 Entry Point 가 여기로 온다. 마땅히 처리할 내용이 없다
+				pSession->CompleteSend();
 			}
 		}
 		else
@@ -478,37 +476,20 @@ const BOOL ServiceManager::workerThread()
 
 const BOOL ServiceManager::sendThread()
 {
-	DWORD	dwSendBytes = 0;
-	DWORD	dwFlags = 0;
-
 	while (_sendThread.IsRun())
 	{
-		DWORD dwRet = WaitForSingleObject(_sendEvent, INFINITE);
-		ResetEvent(_sendEvent);
-
-		if (_sendContext != nullptr)
+		for (int i = 0; i < SESSION_NUM; ++i)
 		{
-			int nReturn = ::WSASend(
-				_sendContext->_SocketContext.clntSocket,
-				&_sendContext->_SocketContext.sendContext->wsaBuf,
-				1,
-				&dwSendBytes,
-				dwFlags,
-				&_sendContext->_SocketContext.sendContext->overlapped,
-				NULL);
+			auto session = _sessionPool.FindSessionIndex(i);
 
-			if (nReturn == SOCKET_ERROR)
+			if (session == nullptr)
 			{
-				if (WSAGetLastError() != ERROR_IO_PENDING)
-				{
-					// 에러처리
-				}
+				continue;
 			}
-
-			_sendContext = nullptr;
+			
+			session->FlushSend();
 		}
 	}
-
 	return TRUE;
 }
 

@@ -13,7 +13,7 @@ namespace CommonLib
 
 	const VOID Profile::SetFilePath(LPCWSTR strPath)
 	{
-		wcscpy(_filePath, strPath);
+		wcscpy_s(_filePath, strPath);
 	}
 
 	const VOID Profile::WriteToINI(LPCWSTR strSection, LPCWSTR strKey, int nValue)
