@@ -21,30 +21,35 @@ namespace CommonLib
 
 	class Thread
 	{
-	public :	// Constructor & Destructor
+	public :	
 
+		// Constructor & Destructor
 		Thread();
 		~Thread();
 
-	public :	// Member public function
+	public :	
 
-		virtual const UINT Run() = 0;
+		// Member public function
+		virtual const UINT  Run() = 0;
         const	BOOL		StartThread();
 		const	BOOL		StopThread();
 		const	BOOL		IsRun()			{	return _isRun;	}
 		const	unsigned	GetThreadID()	{	return _threadID;	}
 
-	protected :	// Member protected variable
+	protected :	
 
+		// Member protected variable
 		volatile BOOL	_isRun;
 
-	private :	// Member private variable
+	private :	
 
+		// Member private variable
 		HANDLE			_threadHandle;
 		unsigned		_threadID;
 
-	private :	// Member private function
+	private :	
 
+		// Member private function
 		static	UINT WINAPI	ThreadFunc(LPVOID lpParam);
 
 	};

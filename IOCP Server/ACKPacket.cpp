@@ -20,9 +20,9 @@ const BOOL ServiceManager::recvCS_AUTH_LOGIN_ACK(SessionData* pSession)
 	_lock.Lock();
 	{
 		_sendContext = pSession;
-		SetEvent(_sendEvent);
 	}
 	_lock.UnLock();
+	SetEvent(_sendEvent);
 
 	return 1;
 }

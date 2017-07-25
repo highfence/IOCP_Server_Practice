@@ -26,25 +26,24 @@ namespace CommonLib
 		SessionData(WORD wSessionID);
 		~SessionData();
 
+		const WORD GetSessionID();
+		const BOOL GetReference();
+		const VOID SetReference();
+		const VOID SetClientAddr(SOCKADDR_IN* pClntAddr);
+		const VOID ClearSession();
+		const VOID ClearSocketContext();
+		const VOID CreateCryptKey();
+
 	public :
 
 		PerSocketContext	_SocketContext;
 		BYTE				wCryptKey;
 
-	public :
-
-		const	WORD	GetSessionID();
-		const	BOOL	GetReference();
-		const	VOID	SetReference();
-		const	VOID	SetClientAddr(SOCKADDR_IN* pClntAddr);
-		const	VOID	ClearSession();
-		const	VOID	ClearSocketContext();
-		const	VOID	CreateCryptKey();
-
 	private :
 
 		WORD				_sessionId;
 		BOOL				_isReference;
+		BOOL				_isSending;
 	};
 
 }

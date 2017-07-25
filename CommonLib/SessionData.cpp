@@ -8,6 +8,7 @@ namespace CommonLib
 	{
 		_sessionId = wSessionID;
 		_isReference = FALSE;
+		_isSending = FALSE;
 
 		_SocketContext.recvContext = new PerIoContext;
 		_SocketContext.sendContext = new PerIoContext;

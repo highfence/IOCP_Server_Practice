@@ -1,5 +1,7 @@
 #pragma once
 
+#include <deque>
+
 #include "../CommonLib/Common.h"
 #include "../CommonLib/SessionPool.h"
 #include "../CommonLib/Thread.h"
@@ -42,10 +44,6 @@ private :
 	const BOOL	releaseLog();
 
 	// Function of Thread
-	static const UINT _AcceptThread(LPVOID lpParam);
-	static const UINT _ControlThread(LPVOID lpParam);
-	static const UINT _WorkerThread(LPVOID lpParam);
-	static const UINT _SendThread(LPVOID lpParam);
 	const BOOL	acceptThread();
 	const BOOL	controlThread();
 	const BOOL	workerThread();
@@ -61,16 +59,22 @@ private :
 private :	
 
 	// Member Variables of ServiceMain
-	MultiThread		_workerThread;
-	SingleThread	_acceptThread;
-	SingleThread	_controlThread;
-	SingleThread	_sendThread;
-	IOCPModule		_iocp;
-	ServerInfo		_serverInfo;
-	SessionPool		_sessionPool;
-	CriticalLock	_lock;
-	SessionData*	_sendContext;
-	HANDLE			_stopEvent;
-	HANDLE			_sendEvent;
+	MultiThread		  _workerThread;
+	SingleThread	  _acceptThread;
+	SingleThread	  _controlThread;
+	SingleThread	  _sendThread;
+	IOCPModule		  _iocp;
+	ServerInfo		  _serverInfo;
+	SessionPool		  _sessionPool;
+	CriticalLock	  _lock;
+	SessionData*	  _sendContext;
+	std::deque<char*> _sendQueue;
+	HANDLE			  _stopEvent;
+	HANDLE			  _sendEvent;
 
+	// Threads
+	static const UINT _AcceptThread(LPVOID lpParam);
+	static const UINT _ControlThread(LPVOID lpParam);
+	static const UINT _WorkerThread(LPVOID lpParam);
+	static const UINT _SendThread(LPVOID lpParam);
 };

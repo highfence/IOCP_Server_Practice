@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Lock.h" />
     <ClInclude Include="LogSystem.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="Protocol.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="LogSystem.cpp" />
     <ClCompile Include="Profile.cpp" />
     <ClCompile Include="ServiceController.cpp" />

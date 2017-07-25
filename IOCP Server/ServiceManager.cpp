@@ -407,28 +407,28 @@ const BOOL ServiceManager::workerThread()
 	SessionData*	pSession = NULL;
 	PPerIoContext		pPerIoCtx = NULL;
 
-	while ( _workerThread.IsRun() )
+	while (_workerThread.IsRun())
 	{
 		dwSizeInOutData = 0;
 		dwResult = 0;
 		pSession = NULL;
 		pPerIoCtx = NULL;
 
-		if ( FALSE == GetQueuedCompletionStatus(_iocp.GetCompletionPort(), 
-												&dwSizeInOutData, 
-												(PULONG_PTR)&pSession, 
-												(LPOVERLAPPED*)&pPerIoCtx, 
-												INFINITE))
+		if (FALSE == GetQueuedCompletionStatus(_iocp.GetCompletionPort(),
+			&dwSizeInOutData,
+			(PULONG_PTR)&pSession,
+			(LPOVERLAPPED*)&pPerIoCtx,
+			INFINITE))
 			dwResult = WSAGetLastError();
 
-		if ( dwResult == 0 )
+		if (dwResult == 0)
 		{
 			DWORD dwError = GetLastError();
 
-			if ( pSession == NULL )
+			if (pSession == NULL)
 				continue;
 
-			if ( dwSizeInOutData == 0 )	// 클라이언트가 접속을 끊었다
+			if (dwSizeInOutData == 0)	// 클라이언트가 접속을 끊었다
 			{
 				static int snCount = 0;
 				WCHAR szTemp[MAX_STRING] = _T("");
@@ -439,31 +439,31 @@ const BOOL ServiceManager::workerThread()
 				_sessionPool.DeleteSession(pSession);
 				continue;
 			}
-			
-			if ( pPerIoCtx == pSession->_SocketContext.recvContext )
+
+			if (pPerIoCtx == pSession->_SocketContext.recvContext)
 			{
 				// 보낸 패킷의 사이즈만큼 받아서 처리할 것
 				packetProcess(pSession);
-				
+
 				DWORD dwFlags = 0;	// out parameter, and I/O 처리가 끝나면 꼭 해당 소켓에 recv 를 걸어둔다.
 				WSARecv(pSession->_SocketContext.clntSocket, &(pSession->_SocketContext.recvContext->wsaBuf), 1, NULL, &dwFlags, &(pSession->_SocketContext.recvContext->overlapped), NULL);
 			}
-			else if ( pPerIoCtx == pSession->_SocketContext.sendContext )
+			else if (pPerIoCtx == pSession->_SocketContext.sendContext)
 			{
 				// WSASend 가 호출되고나서 Entry Point 가 여기로 온다. 마땅히 처리할 내용이 없다
 			}
 		}
 		else
 		{
-			if ( WAIT_TIMEOUT == dwResult )
+			if (WAIT_TIMEOUT == dwResult)
 			{
 			}
-			else if ( ERROR_NETNAME_DELETED == dwResult ) 
+			else if (ERROR_NETNAME_DELETED == dwResult)
 			{
 				_log.EventLog(2, L"WorkerThread", L"ERROR CODE : ERROR_NETNAME_DELETED");
 				_sessionPool.DeleteSession(pSession);
 			}
-			else 
+			else
 			{
 				_log.EventLog(2, L"GetQueuedCompletionStatus unknown Error [%d]", dwResult);
 				_sessionPool.DeleteSession(pSession);
@@ -519,10 +519,10 @@ const BOOL ServiceManager::packetProcess(SessionData* pSession)
 	header_special	Header;
 	memcpy(&Header, pSession->_SocketContext.recvContext->Buffer, SIZE_HEADER);
 
-	switch ( Header.command )
+	switch (Header.command)
 	{
-	case CS_AUTH_LOGIN_REQ	:	this->recvCS_AUTH_LOGIN_REQ(pSession);		break;
-	default					:	bReturn = FALSE;							break;
+	case CS_AUTH_LOGIN_REQ:	this->recvCS_AUTH_LOGIN_REQ(pSession);		break;
+	default:	bReturn = FALSE;							break;
 	}
 
 	return bReturn;
