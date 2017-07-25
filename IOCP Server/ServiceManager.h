@@ -69,7 +69,7 @@ private :
 	ServerInfo		_serverInfo;
 	SessionPool		_sessionPool;
 	CriticalLock	_lock;
-	SessionData*	_sendCtx;
+	SessionData*	_sendContext;
 	HANDLE			_stopEvent;
 	HANDLE			_sendEvent;
 

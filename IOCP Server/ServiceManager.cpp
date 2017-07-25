@@ -221,8 +221,10 @@ const BOOL ServiceManager::StopServer()
 
 	_log.EventLog(2, L"StopServer", L"Release OK : END_NETWORK");
 
-	if ( this->releaseAllData() != TRUE )
+	if (this->releaseAllData() != TRUE)
+	{
 		return FALSE;
+	}
 
 	SetEvent(_stopEvent);
 
@@ -232,8 +234,10 @@ const BOOL ServiceManager::StopServer()
 const UINT ServiceManager::_AcceptThread(LPVOID lpParam)
 {
 	ServiceManager* pThis = (ServiceManager*)lpParam;
-	if ( !pThis )
+	if (!pThis)
+	{
 		return FALSE;
+	}
 
 	pThis->acceptThread();
 
@@ -243,8 +247,10 @@ const UINT ServiceManager::_AcceptThread(LPVOID lpParam)
 const UINT ServiceManager::_ControlThread(LPVOID lpParam)
 {
 	ServiceManager* pThis = (ServiceManager*)lpParam;
-	if ( !pThis )
+	if (!pThis)
+	{
 		return FALSE;
+	}
 
 	pThis->controlThread();
 
@@ -254,8 +260,10 @@ const UINT ServiceManager::_ControlThread(LPVOID lpParam)
 const UINT ServiceManager::_WorkerThread(LPVOID lpParam)
 {
 	ServiceManager* pThis = (ServiceManager*)lpParam;
-	if ( !pThis )
+	if (!pThis)
+	{
 		return FALSE;
+	}
 
 	pThis->workerThread();
 
@@ -265,8 +273,10 @@ const UINT ServiceManager::_WorkerThread(LPVOID lpParam)
 const UINT ServiceManager::_SendThread(LPVOID lpParam)
 {
 	ServiceManager* pThis = (ServiceManager*)lpParam;
-	if ( !pThis )
+	if (!pThis)
+	{
 		return FALSE;
+	}
 
 	pThis->sendThread();
 
@@ -408,7 +418,7 @@ const BOOL ServiceManager::workerThread()
 												&dwSizeInOutData, 
 												(PULONG_PTR)&pSession, 
 												(LPOVERLAPPED*)&pPerIoCtx, 
-												INFINITE) )
+												INFINITE))
 			dwResult = WSAGetLastError();
 
 		if ( dwResult == 0 )
@@ -471,26 +481,32 @@ const BOOL ServiceManager::sendThread()
 	DWORD	dwSendBytes = 0;
 	DWORD	dwFlags = 0;
 
-	while ( _sendThread.IsRun() )
+	while (_sendThread.IsRun())
 	{
 		DWORD dwRet = WaitForSingleObject(_sendEvent, INFINITE);
+		ResetEvent(_sendEvent);
 
-		if ( _sendCtx != NULL )
+		if (_sendContext != nullptr)
 		{
-			int nReturn = ::WSASend(_sendCtx->_SocketContext.clntSocket, &_sendCtx->_SocketContext.sendContext->wsaBuf, 1, &dwSendBytes, dwFlags, &_sendCtx->_SocketContext.sendContext->overlapped, NULL);
+			int nReturn = ::WSASend(
+				_sendContext->_SocketContext.clntSocket,
+				&_sendContext->_SocketContext.sendContext->wsaBuf,
+				1,
+				&dwSendBytes,
+				dwFlags,
+				&_sendContext->_SocketContext.sendContext->overlapped,
+				NULL);
 
-			if ( nReturn == SOCKET_ERROR )
+			if (nReturn == SOCKET_ERROR)
 			{
-				if ( WSAGetLastError() != ERROR_IO_PENDING )
+				if (WSAGetLastError() != ERROR_IO_PENDING)
 				{
 					// 에러처리
 				}
 			}
 
-			_sendCtx = NULL;
+			_sendContext = nullptr;
 		}
-
-		ResetEvent(_sendEvent);
 	}
 
 	return TRUE;
